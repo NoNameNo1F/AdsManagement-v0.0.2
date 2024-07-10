@@ -41,11 +41,10 @@ import VectorSource from 'ol/source/Vector';
 import TileSource from 'ol/source/Tile';
 import { altKeyOnly, click, doubleClick, never, platformModifierKeyOnly, shiftKeyOnly } from 'ol/events/condition';
 
-import { mapConfigs } from '../../../configurations/maps';
+// import { mapConfigs } from '../../../configurations/maps';
 
 import axios from "axios";
-import fs from "fs";
-import path from 'path';
+
 import { fetchAdsPoints, saveAdsPoints } from './axios';
 import {v4 as uuid} from 'uuid';
 import { load } from 'ol/Image';
@@ -86,7 +85,7 @@ const overviewMapControl = new OverviewMap({
 });
 
 function MapRegion() {;
-    const key = mapConfigs.api;
+    const key = import.meta.env.VITE_MAP_API;
 
     const [selectedFeatureInfo, setSelectedFeatureInfo] = useState<SelectedFeatureInfo>({
         name: null,
