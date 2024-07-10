@@ -39,14 +39,16 @@ import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/Tile';
 import VectorSource from 'ol/source/Vector';
 import TileSource from 'ol/source/Tile';
-import { click, doubleClick, never, shiftKeyOnly } from 'ol/events/condition';
+import { altKeyOnly, click, doubleClick, never, platformModifierKeyOnly, shiftKeyOnly } from 'ol/events/condition';
 
-// import { mapConfigs } from '../../../configurations/maps';
+import { mapConfigs } from '../../../configurations/maps';
 
 import axios from "axios";
-
+import fs from "fs";
+import path from 'path';
 import { fetchAdsPoints, saveAdsPoints } from './axios';
 import {v4 as uuid} from 'uuid';
+import { load } from 'ol/Image';
 
 
 interface SelectedFeatureInfo {
@@ -84,14 +86,37 @@ const overviewMapControl = new OverviewMap({
 });
 
 function MapRegion() {;
-    const key = import.meta.env.VITE_MAP_API;
+    const key = mapConfigs.api;
 
     const [selectedFeatureInfo, setSelectedFeatureInfo] = useState<SelectedFeatureInfo>({
         name: null,
         coordinates: null
     });
 
-    let adsPointsSource = new VectorSource();
+    // let adsPointsSource = new VectorSource();
+    const [adsPointsSource] = useState(new VectorSource());
+    // const [adsPointsLayer, setAdsPointsLayer] = useState(new VectorLayer({
+    //     source: adsPointsSource,
+    //     style: new Style({
+    //         // stroke: new Stroke({
+    //         //     color: 'rgba(28, 33, 203, 0.8)',
+    //         // }),
+    //         // fill: new Fill({
+    //         //     color: 'rgba(234, 183, 120, 0.3)',
+    //         // }),
+    //         image: new CircleStyle({
+    //             radius: 8,
+    //             fill: new Fill({
+    //                 color: 'rgba(21, 84, 220, 0.8)',
+    //             }),
+    //             stroke: new Stroke({
+    //                 color: 'rgba(255, 255, 255, 0.8)',
+    //                 width: 1
+    //             }),
+    //         }),
+    //     }),
+    // }));
+
     const [isDrawed, setIsDrawed] = useState<boolean>(false);
     
     /* So basically , the idea of its is fetching every drawed point that So
@@ -164,94 +189,106 @@ function MapRegion() {;
         }),
     });
 
-    const loadAdsPoints = () => {
-        setTimeout(async () => {
-            try {
-                console.log("First Fetching Then Sleepy zzzzz");
-                const geojsonData = await fetchAdsPoints();
+    // const loadAdsPoints = () => {
+    //     setTimeout(async () => {
+    //         try {
+    //             console.log("First Fetching Then Sleepy zzzzz");
+    //             const geojsonData = await fetchAdsPoints();
                 
-                console.log(geojsonData);
+    //             console.log(geojsonData);
                 
-                if (geojsonData) {
-                    const format = new GeoJSON();
-                    const features = format.readFeatures(geojsonData, {
-                        featureProjection: "EPSG:3857"
-                    });
+    //             if (geojsonData) {
+    //                 const format = new GeoJSON();
+    //                 const features = format.readFeatures(geojsonData, {
+    //                     featureProjection: "EPSG:3857"
+    //                 });
+    //                 // let featureList = [];
+    //                 features.forEach((feature) => {
+    //                     const existingFeature = adsPointsSource.getFeatureById(feature.getId()!);
+    //                     if (existingFeature) {
+    //                         adsPointsSource.addFeature(feature);
+    //                         // featureList.push(feature);
+    //                     } else {
+    //                         console.warn(`Feature with ID ${feature.getId()} already exists`);
+    //                     }
+    //                 });
+    //                 // adsPointsSource.addFeatures(features);
+    //                 return adsPointsSource;
+    //             } else {
+    //                 throw new Error(`Invalid GeoJSON data format [117_useEffect_LoadAdsPoints]: ${geojsonData}`);
+    //             }
+    //         } catch (error) {
+    //             console.error("[120]Catching Error loading ads points: ", error);
+    //         }
+    //     }, 2000);
+    // };
 
-                    features.forEach((feature) => {
-                        const existingFeature = adsPointsSource.getFeatureById(feature.getId()!);
-                        if (existingFeature) {
-                            adsPointsSource.addFeature(feature);
-                        } else {
-                            console.warn(`Feature with ID ${feature.getId()} already exists`);
-                        }
-                    });
-                    // adsPointsSource.addFeatures(features);
-                    return adsPointsSource;
-                } else {
-                    throw new Error(`Invalid GeoJSON data format [117_useEffect_LoadAdsPoints]: ${geojsonData}`);
-                }
-            } catch (error) {
-                console.error("[120]Catching Error loading ads points: ", error);
+    const loadAdsPoints = async () => {
+        try {
+            const geojsonData = await fetchAdsPoints();
+            if (geojsonData) {
+                const format = new GeoJSON();
+                const features = format.readFeatures(geojsonData, {
+                    // featureProjection: "EPSG:3857"
+                    featureProjection: "EPSG:4326"
+                });
+                adsPointsSource.addFeatures(features);
+            } else {
+                throw new Error(`Invalid GeoJSON data format [117_useEffect_LoadAdsPoints]: ${geojsonData}`);
             }
-        }, 1000);
+        } catch (error) {
+            console.error("[120]Catching Error loading ads points: ", error);
+        }
     };
 
+    // let adsPointsLayer = new VectorLayer({
+    //     source: adsPointsSource,
+    //     style: new Style({
+    //         // stroke: new Stroke({
+    //         //     color: 'rgba(28, 33, 203, 0.8)',
+    //         // }),
+    //         // fill: new Fill({
+    //         //     color: 'rgba(234, 183, 120, 0.3)',
+    //         // }),
+    //         image: new CircleStyle({
+    //             radius: 8,
+    //             fill: new Fill({
+    //                 color: 'rgba(21, 84, 220, 0.8)',
+    //             }),
+    //             stroke: new Stroke({
+    //                 color: 'rgba(255, 255, 255, 0.8)',
+    //                 width: 1
+    //             }),
+    //         }),
+    //     }),
+    // });
 
-
-    let adsPointsLayer = new VectorLayer({
-        source: adsPointsSource,
-        style: new Style({
-            stroke: new Stroke({
-                color: 'rgba(28, 33, 203, 0.8)',
-            }),
-            fill: new Fill({
-                color: 'rgba(234, 183, 120, 0.3)',
-            }),
-            image: new CircleStyle({
-                radius: 5,
-                fill: new Fill({
-                    color: 'rgba(255, 0, 0, 0.8)',
-                }),
-                stroke: new Stroke({
-                    color: 'rgba(255, 255, 255, 0.8)',
-                    width: 1
-                }),
-            }),
-        }),
-    });
-
-    
-    // useEffect(() => {
-    //     loadAdsPoints();
-    // },[]);
     useEffect(() => {
         // 1. Fetching the all features in the mongodb
-        // loadAdsPoints();
-        // const adsPointsLayer = new VectorLayer({
-        //     source: adsPointsSource,
-        //     style: new Style({
-        //         stroke: new Stroke({
-        //             color: 'rgba(28, 33, 203, 0.8)',
-        //         }),
-        //         fill: new Fill({
-        //             color: 'rgba(234, 183, 120, 0.3)',
-        //         }),
-        //         image: new CircleStyle({
-        //             radius: 5,
-        //             fill: new Fill({
-        //                 color: 'rgba(255, 0, 0, 0.8)',
-        //             }),
-        //             stroke: new Stroke({
-        //                 color: 'rgba(255, 255, 255, 0.8)',
-        //                 width: 1
-        //             }),
-        //         }),
-        //     }),
-        // });
-
-        // loadAdsPoints();
-
+        // const features = loadAdsPoints();
+        // adsPointsSource.addFeatures(features);
+        loadAdsPoints();
+        const adsPointsLayer = new VectorLayer({
+            source: adsPointsSource,
+            style: new Style({
+                // stroke: new Stroke({
+                //     color: 'rgba(28, 33, 203, 0.8)',
+                // }),
+                // fill: new Fill({
+                //     color: 'rgba(234, 183, 120, 0.3)',
+                // }),
+                image: new CircleStyle({
+                    radius: 8,
+                    fill: new Fill({
+                        color: 'rgba(21, 84, 220, 0.8)',
+                    }),
+                    stroke: new Stroke({
+                        color: 'rgba(255, 255, 255, 0.8)',
+                        width: 1
+                    }),
+                }),
+            }),
+        });
 
         // Create a new map instance
         const map = new Map({
@@ -263,7 +300,7 @@ function MapRegion() {;
             ],
             view: new View({
                 center: fromLonLat([106.630076, 10.742332]),
-                zoom: 16
+                zoom: 15
             }),
             controls: defaultControls().extend([
                 new ScaleLine(),
@@ -294,6 +331,7 @@ function MapRegion() {;
             if (e.selected.length > 0) {
                 const selectedFeature = e.selected[0];
                 const geometry = selectedFeature.getGeometry();
+                console.log(geometry)
                 if (geometry) {
                     if (geometry instanceof Point) {
                         const coords = geometry.getCoordinates();
@@ -316,21 +354,21 @@ function MapRegion() {;
                 });
             }
         });
-
+        
         const draw = new Draw({
-            // source: upperBaseLayer.getSource()!,
             source: adsPointsSource,
             type: 'Point',
-            // condition: click,
+            condition: altKeyOnly || click,
         });
 
         map.addInteraction(draw);
         // draw.on("drawstart", (e) => {
 
         // })
-        draw.on('drawend', (event) => {
-            console.log("adsPointLayer: ", adsPointsLayer.getSource()?.getFeatures());
-            console.log("adsPointLayer: ", adsPointsLayer.getSource());
+        draw.on('drawend', async (event) => {
+            console.log("1. adsPointLayer: ", adsPointsLayer.getSource()?.getFeatures());
+            console.log("2. adsPointSource: ", adsPointsLayer.getSource());
+            console.log("3. adsPointSource: ", upperBaseLayer.getSource());
 
             setIsDrawed(!isDrawed);
 
@@ -342,25 +380,21 @@ function MapRegion() {;
             feature.setId(uuid());
             const newFeature = format.writeFeatureObject(feature);
 
-            console.log("New feature created: ", newFeature);
+            console.log("3. New feature created: ", newFeature);
 
             
             try {
-                saveAdsPoints(newFeature);
+                await saveAdsPoints(newFeature);
                 adsPointsSource.addFeature(feature);
-                console.log("Features: ", adsPointsSource.getFeatures());
+                console.log("4a. Features: ", adsPointsSource.getFeatures());
             } catch (error) {
-                console.error("Error saving ads points: ", error);
+                console.error("4b. Error saving ads points: ", error);
             }
-
-            setIsDrawed(!isDrawed);
         });
         
-
         return () => {
             map.setTarget();
         };
-        // }, [isDrawed,adsPointsSource]);
     }, []);
 
     return (
