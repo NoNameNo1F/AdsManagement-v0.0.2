@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Feature, Tile, Map, View } from 'ol';
+import { Feature, Tile, Map, View, Collection } from 'ol';
 import { fromLonLat, toLonLat } from 'ol/proj';
 import { Geometry, Point } from 'ol/geom';
 import { GeoJSON } from 'ol/format';
 import { TileJSON, XYZ } from 'ol/source';
-import { createStringXY } from 'ol/coordinate';
+// import { getCoordinates } from 'ol/coordinate';
 import { Style, Icon, Circle as CircleStyle, Fill, Stroke } from 'ol/style';
 import {
     defaults as defaultControls,
@@ -39,15 +39,20 @@ import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/Tile';
 import VectorSource from 'ol/source/Vector';
 import TileSource from 'ol/source/Tile';
-import { click, never, shiftKeyOnly } from 'ol/events/condition';
+import { click, doubleClick, never, shiftKeyOnly } from 'ol/events/condition';
+
+// import { mapConfigs } from '../../../configurations/maps';
 
 import axios from "axios";
 
+import { fetchAdsPoints, saveAdsPoints } from './axios';
+import {v4 as uuid} from 'uuid';
+
+
 interface SelectedFeatureInfo {
-    type: string | null;
+    name: string | null;
     coordinates: number[] | null;
 };
-
 
 const formatCoordinate = (coordinate: any) => {
     const lonLat = toLonLat(coordinate);
@@ -78,81 +83,174 @@ const overviewMapControl = new OverviewMap({
     rotateWithView: true
 });
 
-function MapRegion() {
+function MapRegion() {;
     const key = import.meta.env.VITE_MAP_API;
 
     const [selectedFeatureInfo, setSelectedFeatureInfo] = useState<SelectedFeatureInfo>({
-        type: null,
+        name: null,
         coordinates: null
     });
 
-    useEffect(() => {
-        const baseLayer = new TileLayer({
-            source: new TileJSON({
-                url: `https://api.maptiler.com/maps/streets-v2/tiles.json?key=${key}`,
-                tileSize: 512,
-                crossOrigin: 'anonymous'
-            }),
-            /*
-                Another way to generate base maps
-                new TileLayer({
-                    source: new XYZ({
-                        url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-                    })
-                }),
-            */
-        });
-
-        const overviewLayer = new VectorLayer({
-            source: new VectorSource({
-                url: `https://api.maptiler.com/data/5dd8ce8b-d67c-44b8-9052-f58aa9f71427/features.json?key=${key}`,
-                format: new GeoJSON(),
-                loader: function (extent, resolution, projection) {
-                    const url = `https://api.maptiler.com/data/5dd8ce8b-d67c-44b8-9052-f58aa9f71427/features.json?key=${key}`;
-                    axios.get(url)
-                        .then(response => {
-                            const data = response.data;
-                            console.log(data);
-                            const filteredFeatures = data.features.filter((feature: any) => {
-                                const name = feature.properties.text;
-                                const type = feature.geometry.type;
-                                return name && (type === 'Polygon' || type === 'Point');
-                            });
-                            console.log(filteredFeatures);
-                            const geojson = {
-                                type: 'FeatureCollection',
-                                features: filteredFeatures
-                            };
-                            const format = new GeoJSON();
-                            const features = format.readFeatures(geojson, {
-                                featureProjection: projection
-                            });
-                            (this as VectorSource).addFeatures(features);
-                        })
-                        .catch(error => {
-                            console.error("Error fetching data", error);
+    let adsPointsSource = new VectorSource();
+    const [isDrawed, setIsDrawed] = useState<boolean>(false);
+    
+    /* So basically , the idea of its is fetching every drawed point that So
+    VH-TT picking for ads, but this is quitely redundant cause it makes the
+    call down to db everytime, make it slowly. So we just fetch it once, and
+    everytime we draw, we firstly save then we will update the adsPointsSource
+    to hold. It will become much more effiecient.  */
+    
+    
+    const baseLayer = new TileLayer({
+        source: new TileJSON({
+            url: `https://api.maptiler.com/maps/openstreetmap/tiles.json?key=${key}`,
+            tileSize: 512,
+            crossOrigin: 'anonymous'
+        }),
+    });
+    
+    const upperBaseLayer = new VectorLayer({
+        source: new VectorSource({
+            url: `https://api.maptiler.com/data/5dd8ce8b-d67c-44b8-9052-f58aa9f71427/features.json?key=${key}`,
+            format: new GeoJSON(),
+            loader: function (extent, resolution, projection) {
+                const url = `https://api.maptiler.com/data/5dd8ce8b-d67c-44b8-9052-f58aa9f71427/features.json?key=${key}`;
+                axios.get(url)
+                    .then(response => {
+                        const data = response.data;
+                        console.log("Fetching: ", data);
+                        const filteredFeatures = data.features.filter((feature: any) => {
+                            const name = feature.properties.text;
+                            const type = feature.geometry.type;
+                            return name && (type === 'Polygon' || type === 'Point');
                         });
-                }
+                        
+                        const geojson = {
+                            type: 'FeatureCollection',
+                            features: filteredFeatures
+                        };
+                        console.log("GeoJson: ", geojson);
+
+                        const format = new GeoJSON();
+                        const features = format.readFeatures(geojson, {
+                            featureProjection: projection
+                        });
+                        console.log("Format: ", features);
+
+                        (this as VectorSource).addFeatures(features);
+                    })
+                    .catch(error => {
+                        console.error("Error fetching data", error);
+                    });
+            }
+        }),
+        style: new Style({
+            stroke: new Stroke({
+                color: 'rgba(28, 33, 203, 0.8)',
             }),
-            style: new Style({
-                stroke: new Stroke({
-                    color: 'rgba(28, 33, 203, 0.8)',
-                }),
+            fill: new Fill({
+                color: 'rgba(234, 183, 120, 0.3)',
+            }),
+            image: new CircleStyle({
+                radius: 5,
                 fill: new Fill({
-                    color: 'rgba(234, 183, 120, 0.3)',
+                    color: 'rgba(255, 0, 0, 0.8)',
                 }),
-                image: new CircleStyle({
-                    radius: 5,
-                    fill: new Fill({
-                        color: 'rgba(255, 0, 0, 0.8)',
-                    }),
-                    stroke: new Stroke({
-                        color: 'rgba(255, 255, 255, 0.8)',
-                        width: 1
-                    }),
+                stroke: new Stroke({
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    width: 1
                 }),
             }),
-        });
+        }),
+    });
+
+    const loadAdsPoints = () => {
+        setTimeout(async () => {
+            try {
+                console.log("First Fetching Then Sleepy zzzzz");
+                const geojsonData = await fetchAdsPoints();
+                
+                console.log(geojsonData);
+                
+                if (geojsonData) {
+                    const format = new GeoJSON();
+                    const features = format.readFeatures(geojsonData, {
+                        featureProjection: "EPSG:3857"
+                    });
+
+                    features.forEach((feature) => {
+                        const existingFeature = adsPointsSource.getFeatureById(feature.getId()!);
+                        if (existingFeature) {
+                            adsPointsSource.addFeature(feature);
+                        } else {
+                            console.warn(`Feature with ID ${feature.getId()} already exists`);
+                        }
+                    });
+                    // adsPointsSource.addFeatures(features);
+                    return adsPointsSource;
+                } else {
+                    throw new Error(`Invalid GeoJSON data format [117_useEffect_LoadAdsPoints]: ${geojsonData}`);
+                }
+            } catch (error) {
+                console.error("[120]Catching Error loading ads points: ", error);
+            }
+        }, 1000);
+    };
+
+
+
+    let adsPointsLayer = new VectorLayer({
+        source: adsPointsSource,
+        style: new Style({
+            stroke: new Stroke({
+                color: 'rgba(28, 33, 203, 0.8)',
+            }),
+            fill: new Fill({
+                color: 'rgba(234, 183, 120, 0.3)',
+            }),
+            image: new CircleStyle({
+                radius: 5,
+                fill: new Fill({
+                    color: 'rgba(255, 0, 0, 0.8)',
+                }),
+                stroke: new Stroke({
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    width: 1
+                }),
+            }),
+        }),
+    });
+
+    
+    // useEffect(() => {
+    //     loadAdsPoints();
+    // },[]);
+    useEffect(() => {
+        // 1. Fetching the all features in the mongodb
+        // loadAdsPoints();
+        // const adsPointsLayer = new VectorLayer({
+        //     source: adsPointsSource,
+        //     style: new Style({
+        //         stroke: new Stroke({
+        //             color: 'rgba(28, 33, 203, 0.8)',
+        //         }),
+        //         fill: new Fill({
+        //             color: 'rgba(234, 183, 120, 0.3)',
+        //         }),
+        //         image: new CircleStyle({
+        //             radius: 5,
+        //             fill: new Fill({
+        //                 color: 'rgba(255, 0, 0, 0.8)',
+        //             }),
+        //             stroke: new Stroke({
+        //                 color: 'rgba(255, 255, 255, 0.8)',
+        //                 width: 1
+        //             }),
+        //         }),
+        //     }),
+        // });
+
+        // loadAdsPoints();
 
 
         // Create a new map instance
@@ -160,7 +258,8 @@ function MapRegion() {
             target: 'map',
             layers: [
                 baseLayer,
-                overviewLayer,
+                upperBaseLayer,
+                adsPointsLayer,
             ],
             view: new View({
                 center: fromLonLat([106.630076, 10.742332]),
@@ -168,7 +267,6 @@ function MapRegion() {
             }),
             controls: defaultControls().extend([
                 new ScaleLine(),
-                // new Attribution(),
                 new FullScreen(),
                 new MousePosition({
                     coordinateFormat: formatCoordinate,
@@ -194,7 +292,6 @@ function MapRegion() {
 
         select.on('select', (e) => {
             if (e.selected.length > 0) {
-
                 const selectedFeature = e.selected[0];
                 const geometry = selectedFeature.getGeometry();
                 if (geometry) {
@@ -202,68 +299,69 @@ function MapRegion() {
                         const coords = geometry.getCoordinates();
                         const lonLat = toLonLat(coords);
                         setSelectedFeatureInfo({
-                            type: 'Point',
+                            name: selectedFeature.getProperties().text,
                             coordinates: lonLat
                         });
                     } else {
                         setSelectedFeatureInfo({
-                            type: geometry.getType(),
+                            name: selectedFeature.getProperties().text,
                             coordinates: null
                         });
                     }
                 }
-
             } else {
                 setSelectedFeatureInfo({
-                    type: null,
+                    name: null,
                     coordinates: null
                 });
             }
         });
 
-        const source = overviewLayer.getSource();
-        if (source) {
-            const draw = new Draw({
-                source: source,
-                type: 'Point'
+        const draw = new Draw({
+            // source: upperBaseLayer.getSource()!,
+            source: adsPointsSource,
+            type: 'Point',
+            // condition: click,
+        });
+
+        map.addInteraction(draw);
+        // draw.on("drawstart", (e) => {
+
+        // })
+        draw.on('drawend', (event) => {
+            console.log("adsPointLayer: ", adsPointsLayer.getSource()?.getFeatures());
+            console.log("adsPointLayer: ", adsPointsLayer.getSource());
+
+            setIsDrawed(!isDrawed);
+
+            let feature = event.feature;
+            const format = new GeoJSON();
+            feature.setProperties({
+                text: "Ads point",
             });
-            map.addInteraction(draw);
+            feature.setId(uuid());
+            const newFeature = format.writeFeatureObject(feature);
+
+            console.log("New feature created: ", newFeature);
+
             
-            draw.on('drawend', (event) => {
-                const feature = event.feature;
-                const format = new GeoJSON();
-                const newFeatureGeoJSON = format.writeFeatureObject(feature, {
-                    featureProjection: "EPSG: 3857"
-                });
-
-                const existsingFeatureGeoJSON = format.writeFeaturesObject(source.getFeatures(), {
-                    featureProjection: "EPSG: 3857"
-                });
-
-                existsingFeatureGeoJSON.features.push(newFeatureGeoJSON);
-
-                updateGeoJSONData(existsingFeatureGeoJSON)
-            });
-            const updateGeoJSONData = (updatedGeoJSON: any) => {
-                const url = `https://api.maptiler.com/data/5dd8ce8b-d67c-44b8-9052-f58aa9f71427/features.json?key=${key}`;
-
-                axios.put(url, updatedGeoJSON)
-                    .then(response => {
-                        console.log("GeoJSON data updated successfully:", response.data);
-                    })
-                    .catch(error => {
-                        console.error("Error updating GeoJSON data:", error);
-                    });
+            try {
+                saveAdsPoints(newFeature);
+                adsPointsSource.addFeature(feature);
+                console.log("Features: ", adsPointsSource.getFeatures());
+            } catch (error) {
+                console.error("Error saving ads points: ", error);
             }
-        }
 
+            setIsDrawed(!isDrawed);
+        });
         
 
         return () => {
-            // Cleanup function to remove the map when the component unmounts
             map.setTarget();
         };
-    }, [key]);
+        // }, [isDrawed,adsPointsSource]);
+    }, []);
 
     return (
         <div className="container">
@@ -277,7 +375,7 @@ function MapRegion() {
                         backgroundColor: "white",
                         padding: "10px",
                     }}>
-                        <p><strong>Type:</strong> {selectedFeatureInfo.type}</p>
+                        <p><strong>Type:</strong> {selectedFeatureInfo.name}</p>
                         <p><strong>Coordinates:</strong> {selectedFeatureInfo.coordinates ? selectedFeatureInfo.coordinates.join(', ') : ""}</p>
                     </div>
                 )}
@@ -292,3 +390,4 @@ function MapRegion() {
 }
 
 export default MapRegion;
+
