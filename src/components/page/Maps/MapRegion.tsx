@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Feature, Tile, Map, View, Collection } from 'ol';
 import { fromLonLat, toLonLat } from 'ol/proj';
 import { Geometry, Point } from 'ol/geom';
@@ -44,7 +44,6 @@ import { altKeyOnly, click, doubleClick, never, platformModifierKeyOnly, shiftKe
 // import { mapConfigs } from '../../../configurations/maps';
 
 import axios from "axios";
-
 import { fetchAdsPoints, saveAdsPoints } from './axios';
 import {v4 as uuid} from 'uuid';
 import { load } from 'ol/Image';
@@ -91,31 +90,12 @@ function MapRegion() {;
         name: null,
         coordinates: null
     });
+    // const [markerLayer] = useState(new VectorSource());
+    const [drawInteraction, setDrawInteraction] = useState<Draw | null>(null);
+    const [isDrawEnabled, setIsDrawEnabled] = useState(false);
+    const mapRef = useRef<Map | null>(null);
 
-    // let adsPointsSource = new VectorSource();
     const [adsPointsSource] = useState(new VectorSource());
-    // const [adsPointsLayer, setAdsPointsLayer] = useState(new VectorLayer({
-    //     source: adsPointsSource,
-    //     style: new Style({
-    //         // stroke: new Stroke({
-    //         //     color: 'rgba(28, 33, 203, 0.8)',
-    //         // }),
-    //         // fill: new Fill({
-    //         //     color: 'rgba(234, 183, 120, 0.3)',
-    //         // }),
-    //         image: new CircleStyle({
-    //             radius: 8,
-    //             fill: new Fill({
-    //                 color: 'rgba(21, 84, 220, 0.8)',
-    //             }),
-    //             stroke: new Stroke({
-    //                 color: 'rgba(255, 255, 255, 0.8)',
-    //                 width: 1
-    //             }),
-    //         }),
-    //     }),
-    // }));
-
     const [isDrawed, setIsDrawed] = useState<boolean>(false);
     
     /* So basically , the idea of its is fetching every drawed point that So
@@ -188,40 +168,6 @@ function MapRegion() {;
         }),
     });
 
-    // const loadAdsPoints = () => {
-    //     setTimeout(async () => {
-    //         try {
-    //             console.log("First Fetching Then Sleepy zzzzz");
-    //             const geojsonData = await fetchAdsPoints();
-                
-    //             console.log(geojsonData);
-                
-    //             if (geojsonData) {
-    //                 const format = new GeoJSON();
-    //                 const features = format.readFeatures(geojsonData, {
-    //                     featureProjection: "EPSG:3857"
-    //                 });
-    //                 // let featureList = [];
-    //                 features.forEach((feature) => {
-    //                     const existingFeature = adsPointsSource.getFeatureById(feature.getId()!);
-    //                     if (existingFeature) {
-    //                         adsPointsSource.addFeature(feature);
-    //                         // featureList.push(feature);
-    //                     } else {
-    //                         console.warn(`Feature with ID ${feature.getId()} already exists`);
-    //                     }
-    //                 });
-    //                 // adsPointsSource.addFeatures(features);
-    //                 return adsPointsSource;
-    //             } else {
-    //                 throw new Error(`Invalid GeoJSON data format [117_useEffect_LoadAdsPoints]: ${geojsonData}`);
-    //             }
-    //         } catch (error) {
-    //             console.error("[120]Catching Error loading ads points: ", error);
-    //         }
-    //     }, 2000);
-    // };
-
     const loadAdsPoints = async () => {
         try {
             const geojsonData = await fetchAdsPoints();
@@ -240,32 +186,8 @@ function MapRegion() {;
         }
     };
 
-    // let adsPointsLayer = new VectorLayer({
-    //     source: adsPointsSource,
-    //     style: new Style({
-    //         // stroke: new Stroke({
-    //         //     color: 'rgba(28, 33, 203, 0.8)',
-    //         // }),
-    //         // fill: new Fill({
-    //         //     color: 'rgba(234, 183, 120, 0.3)',
-    //         // }),
-    //         image: new CircleStyle({
-    //             radius: 8,
-    //             fill: new Fill({
-    //                 color: 'rgba(21, 84, 220, 0.8)',
-    //             }),
-    //             stroke: new Stroke({
-    //                 color: 'rgba(255, 255, 255, 0.8)',
-    //                 width: 1
-    //             }),
-    //         }),
-    //     }),
-    // });
-
     useEffect(() => {
         // 1. Fetching the all features in the mongodb
-        // const features = loadAdsPoints();
-        // adsPointsSource.addFeatures(features);
         loadAdsPoints();
         const adsPointsLayer = new VectorLayer({
             source: adsPointsSource,
@@ -289,7 +211,7 @@ function MapRegion() {;
             }),
         });
 
-        // Create a new map instance
+        // 2. Create map
         const map = new Map({
             target: 'map',
             layers: [
@@ -319,6 +241,8 @@ function MapRegion() {;
                 }),
             ]),
         });
+
+        mapRef.current = map;
 
         const select = new Select({
             condition: click
@@ -360,10 +284,13 @@ function MapRegion() {;
             condition: altKeyOnly || click,
         });
 
-        map.addInteraction(draw);
-        // draw.on("drawstart", (e) => {
+        setDrawInteraction(draw);
+        
+        // map.addInteraction(draw);
+        draw.on("drawstart", (event) => {
+            console.log("Drawing started", event);
+        });
 
-        // })
         draw.on('drawend', async (event) => {
             console.log("1. adsPointLayer: ", adsPointsLayer.getSource()?.getFeatures());
             console.log("2. adsPointSource: ", adsPointsLayer.getSource());
@@ -395,6 +322,17 @@ function MapRegion() {;
             map.setTarget();
         };
     }, []);
+    const toggleDrawInteraction = () => {
+        const map = mapRef.current;
+        if (drawInteraction) {
+            if (isDrawEnabled) {
+                map!.removeInteraction(drawInteraction);
+            } else {
+                map!.addInteraction(drawInteraction);
+            }
+            setIsDrawEnabled(!isDrawEnabled);
+        }
+    };
 
     return (
         <div className="container">
@@ -413,6 +351,9 @@ function MapRegion() {;
                     </div>
                 )}
             </div>
+            <button onClick={toggleDrawInteraction}>
+                {isDrawEnabled ? 'Disable Drawing' : 'Enable Drawing'}
+            </button>
             <div className="col-6">
                 <div id="map" style={{ width: '80vw', height: '80vh' }}>
 
