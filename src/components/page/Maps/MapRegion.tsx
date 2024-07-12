@@ -44,9 +44,11 @@ import { altKeyOnly, click, doubleClick, never, platformModifierKeyOnly, shiftKe
 // import { mapConfigs } from '../../../configurations/maps';
 
 import axios from "axios";
+
 import { fetchAdsPoints, saveAdsPoints } from './axios';
 import {v4 as uuid} from 'uuid';
 import { load } from 'ol/Image';
+import toastNotify from '../../../helpers/toastNotify';
 
 
 interface SelectedFeatureInfo {
@@ -327,39 +329,57 @@ function MapRegion() {;
         if (drawInteraction) {
             if (isDrawEnabled) {
                 map!.removeInteraction(drawInteraction);
+                toastNotify("Drawing disabled", "success");
             } else {
                 map!.addInteraction(drawInteraction);
+                toastNotify("Drawing enabled", "success");
             }
             setIsDrawEnabled(!isDrawEnabled);
         }
     };
 
     return (
-        <div className="container">
-            <div className="col-2">
+        <div className="row justify-content-center">
+            <div className="col-md-4">
                 {/* The map will be rendered inside this div */}
                 {selectedFeatureInfo && (
-                    <div className="" style={{
-                        position: "absolute",
-                        top: "10px",
-                        left: "10px",
-                        backgroundColor: "white",
-                        padding: "10px",
-                    }}>
+                    // <div className="" style={{
+                    //     position: "absolute",
+                    //     top: "10px",
+                    //     left: "10px",
+                    //     backgroundColor: "white",
+                    //     padding: "10px",
+                    // }}>
+                    <div className="">
                         <p><strong>Type:</strong> {selectedFeatureInfo.name}</p>
                         <p><strong>Coordinates:</strong> {selectedFeatureInfo.coordinates ? selectedFeatureInfo.coordinates.join(', ') : ""}</p>
                     </div>
                 )}
             </div>
-            <button onClick={toggleDrawInteraction}>
-                {isDrawEnabled ? 'Disable Drawing' : 'Enable Drawing'}
-            </button>
-            <div className="col-6">
-                <div id="map" style={{ width: '80vw', height: '80vh' }}>
+            <div className="col-8">
+                <div id="map" style={{ width: '60vw', height: '80vh' }}>
 
                 </div>
+                
+                <button onClick={toggleDrawInteraction}>
+                    {isDrawEnabled ? 'Disable Drawing' : 'Enable Drawing'}
+                </button>
             </div>
         </div>
+//         <div className="container">
+//   <div className="row">
+//     <div className="col-md-4">.col-md-4</div>
+//     <div className="col-md-4 ms-auto">.col-md-4 .ms-auto</div>
+//   </div>
+//   <div className="row">
+//     <div className="col-md-3 ms-md-auto">.col-md-3 .ms-md-auto</div>
+//     <div className="col-md-3 ms-md-auto">.col-md-3 .ms-md-auto</div>
+//   </div>
+//   <div className="row">
+//     <div className="col-auto me-auto">.col-auto .me-auto</div>
+//     <div className="col-auto">.col-auto</div>
+//   </div>
+// </div>
     );
 }
 
