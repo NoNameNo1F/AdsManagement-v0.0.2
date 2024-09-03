@@ -1,0 +1,8 @@
+react-router-dom
+ol
+bootstrap
+bootstrap-icons
+axios
+styled-components
+redux
+@reduxjs/toolkit
