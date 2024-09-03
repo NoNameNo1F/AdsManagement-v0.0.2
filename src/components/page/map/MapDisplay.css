@@ -1,0 +1,87 @@
+:root {
+    --background-color: #F4F7FA;
+    --text-color: #F9FAFB;
+    --hover-color: #D1D5DB;
+    --action-color: #3B82F6;
+    --object-color: #1F2A44;
+    --text-color-black: #111827;
+}
+
+.map-container {
+    height: 85vh;
+    width: 100vw;
+    background-color: var(--background-color);
+    margin: 5px 0px;
+    border-radius: 5px;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.3), -4px -4px 10px rgba(0,0,0,0.3);
+    position: relative;
+}
+.search-container {
+    position: absolute;
+    display: flex;
+    justify-content: flex-start;
+    height: 55px;
+    width: 40vw;
+    align-items: center;
+    padding: 8px;
+    margin: 20px 0px 0px 40px;
+    background-color: var(--background-color);
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    z-index: 100;
+    transition: box-shadow 300ms ease-out;
+}
+.search-container:hover {
+    color: var(--text-color-black);
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.6);
+}
+
+.bi-search {
+    cursor: pointer;
+    padding: 10px;
+}
+
+.search-input {
+    background-color: var(--background-color);
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+    flex-grow: 1;
+}
+
+#custom-popup {
+    display: none;
+    position: absolute;
+    width: 300px;
+    height: auto;
+    background-color: white;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1s);
+    z-index: 1000;
+}
+
+.ads-popup-title {
+    margin: 0 0 10px;
+    font-size: 16px;
+}
+
+#custom-popup p {
+    font-size: 14px;
+}
+
+#custom-popup button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#custom-popup button:hover {
+    background-color: #0056b3;
+}
