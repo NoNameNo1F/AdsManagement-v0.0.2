@@ -1,16 +1,30 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Footer, Header } from '../components/layout';
-import Home from '../pages/Home';
+import { Home, NotFound } from '../pages/';
+import { AdsPointItem, AdsPointsList } from '../components/page/adspoint';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div>
+    <BrowserRouter>
       <Header />
-        <Home />
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route
+          path="/login"
+          element={<Home />}
+        ></Route>
+
+        <Route path="/ads-point">
+          <Route path="" element={<AdsPointsList />}></Route>
+          {/* <Route path="details/:uuid" element={<AdsPointItem />}></Route> */}
+        </Route>
+
+        <Route path="*" element={<NotFound />}></Route>
+      </Routes>
       <Footer />
-    </div>
-      
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
