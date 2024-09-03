@@ -1,0 +1,28 @@
+.footerr {
+    height: 5vh;
+    padding: 10px 0px;
+    background:
+    linear-gradient(
+      to right,
+      rgba(255, 0, 0, 1),
+      rgba(255, 0, 180, 1),
+      rgba(0, 100, 200, 1)
+    );
+    background-size: 0 100px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+  transition: background-size 1500ms, color 1000ms;
+    color: #003140;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: bold 16px Roboto, san-serif;
+    margin-top: 10px;
+    box-shadow: 0px -4px 10px rgba(20, 20, 255, 0.3);
+    border-radius: 10px 10px 0px 0px;
+}
+
+.footerr:hover {
+    color: #E2E8F0;
+    background-size: 100% 100px;
+}
