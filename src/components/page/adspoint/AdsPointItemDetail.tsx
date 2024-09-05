@@ -1,5 +1,5 @@
 import React from 'react';
-import "./style.css";
+import "./AdsPoint.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
 import { IAdsPointItem } from '../../../interfaces';
