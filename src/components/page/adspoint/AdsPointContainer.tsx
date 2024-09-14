@@ -9,12 +9,6 @@ import { IAdsPointItem } from '../../../interfaces';
 const AdsPointContainer: React.FC = () => {
 
     const selectedAdsPointItem: IAdsPointItem = useSelector((state: RootState) => state.adsPoint.selectedAdsPointItem);
-    {/* {
-        showOptions === "newest" ? <AdsPointList option="newest" /> :
-            showOptions === "hot" ? <AdsPointList option="hot" /> :
-                showOptions === "nearby" ? <AdsPointList option="nearby" /> :
-                    <AdsPointList option="newest" />
-    } */}
 
     return (
         <div className="ads-point-container">

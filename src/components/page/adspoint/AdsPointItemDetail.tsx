@@ -1,41 +1,57 @@
 import React from 'react';
-import "./style.css";
+import "./AdsPoint.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
-import { IAdsPointItem } from '../../../interfaces';
+import { IAdsBoardItem, IAdsPointItem } from '../../../interfaces';
 import { selectAdsPoint } from '../../../store/redux/AdsPoint/actions';
+import { AdsBoardItem } from '../adsboard';
 
 const AdsPointItemDetail: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
-
+    const boards: IAdsBoardItem[] = useSelector((state: RootState) => state.adsPoint.adsBoardsList);
     const dispatch = useDispatch();
 
     return (
-        <div>
-            <div className="ads-point-item-detail">
-                <div className="detail-section" style={{ width: '330px', height: '300px' }}>
-                    <h4>Detail Information</h4>
-                    <p>Address: {adsPointItem.address}</p>
-                    <p>Ward: {adsPointItem.ward.name}</p>
-                    <p>District: {adsPointItem.district.name}</p>
-                    <p>Type of Ads: {adsPointItem.adsType}</p>
-                    <p>Location Type: {adsPointItem.locationType}</p>
-                    <p>Number of Boards: {adsPointItem.numberOfBoards}</p>
-                    <p>Planned Status: {adsPointItem.isPlanned ? "Planned" : "Wait for Approval"}</p>
-                </div>
-                {/* <div className="boards-section">
-                    <h4>Advertisement Boards</h4>
-                    {adsPointItem.adsBoards?.map((board, index) => (
-                        <div key={index} className="board-item">
-                            <p>Company Name: {board.companyContacts.companyName}</p>
-                            <p>Board Type: {board.adBoardType}</p>
-                            <p>Size: {board.size}</p>
-                        </div>
-                    ))}
-                </div> */}
-                {/* <div className="ads-point-detail-image">
+        <div className="ads-point-item-detail">
+            <div className="row mb-3">
+                <div className="col-5 ads-point-item-details__image">
                     <img src="https://th.bing.com/th/id/OIP.v8hT9gXo1QmVeH-9LA6fHgHaIB?rs=1&pid=ImgDetMain" alt="Location Image" />
-                </div> */}
-                <button onClick={() => dispatch(selectAdsPoint(null))}>Close</button>
+                </div>
+                <div className="col">
+                    <div className="ads-point-item-details__info">
+                        <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.Ward.name} - {adsPointItem.District.name}
+                    </div>
+                    <div className="ads-point-item-details__info">
+                        <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.AdvertisingForm}
+                    </div>
+                    <div className="ads-point-item-details__info">
+                        <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.LocationType}
+                    </div>
+                    <div className="ads-point-item-details__info">
+                        <span className="fw-medium"></span> &nbsp;
+                        {adsPointItem.IsPlanned ? (
+                            <i className="bi bi-patch-check-fill ads-point-item-details approved">Planned</i>
+                        ) : (
+                            <i className="bi bi-exclamation-triangle-fill ads-point-item-details not-approved">Wait for Approval</i>
+                        )}
+                    </div>
+                    <div className="d-flex align-items-center">
+                        <button className="button button-close col-4" onClick={() => dispatch(selectAdsPoint(null))}>
+                            Back
+                        </button>
+
+                        <button className=" button button-report col-4" onClick={() => dispatch(selectAdsPoint(null))}>
+                            Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div className="ads-boards-list">
+                {boards.map((board, index) => (
+                    <AdsBoardItem
+                        key={index}
+                        {...board}
+                    />
+                ))}
             </div>
         </div>
     );

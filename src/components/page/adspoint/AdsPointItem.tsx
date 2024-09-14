@@ -16,10 +16,10 @@ const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
       <div className="row">
         <div className="d-inline-block col-8 ads-point-title">
 
-          <span>{adsPointItem.address}</span>
+          <span>{adsPointItem.Address}</span>
         </div>
         <div className="d-inline-block col-4">
-          {adsPointItem.numberOfBoards}/6 Boards
+          {adsPointItem.NumberOfBoards}/6 Boards
         </div>
       </div>
       <div className="row">
@@ -28,25 +28,25 @@ const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
             <span className="fw-medium">
               Type of Ads:
             </span>
-            &nbsp;{adsPointItem.adsType}
+            &nbsp;{adsPointItem.AdvertisingForm}
           </div>
           <div className="ads-point-item__summary">
             <span className="fw-medium">
               Location Type:
             </span>
-            &nbsp;{adsPointItem.locationType}
+            &nbsp;{adsPointItem.LocationType}
           </div>
           <div className="align-content-between ads-point-item__summary">
             <span className="fw-medium">
               Area:
             </span>
-            &nbsp;{adsPointItem.ward.name} - {adsPointItem.district.name}
+            &nbsp;{adsPointItem.Ward.name} - {adsPointItem.District.name}
           </div>
           <div className="ads-point-item__summary">
             <span className="fw-medium">
               Planned Status:
             </span>
-            &nbsp;{adsPointItem.isPlanned ? "Planned" : "Wait for Approval"}
+            &nbsp;{adsPointItem.IsPlanned ? "Planned" : "Wait for Approval"}
           </div>
         </div>
         <div className="col-4 ads-point-item__image">
