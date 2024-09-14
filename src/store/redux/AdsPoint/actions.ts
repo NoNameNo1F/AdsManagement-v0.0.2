@@ -1,9 +1,10 @@
 import { IAdsBoardItem, IAdsPointItem } from "../../../interfaces";
 import * as actionTypes from "./actionTypes";
 
-export const handleAdsContainer = () => {
+export const handleAdsContainer = (state: boolean) => {
     return {
-        type: actionTypes.HANDLE_ADS_CONTAINER
+        type: actionTypes.HANDLE_ADS_CONTAINER,
+        payload: state
     }
 };
 
@@ -28,7 +29,7 @@ export const setAdsPoints = (listItem: IAdsPointItem[]) => {
     }
 };
 
-export const setAdsBoards = (listItem: IAdsPointItem[]) => {
+export const setAdsBoards = (listItem: IAdsBoardItem[]) => {
     return {
         type: actionTypes.SET_ADS_BOARDS,
         payload: listItem
