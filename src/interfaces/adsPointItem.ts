@@ -1,18 +1,20 @@
-import { AdsType, LocationType } from "../enums";
+// import { EAdvertisingForm, LocationType } from "../enums";
 import IDistrict from "./types/district";
 import IWard from "./types/ward";
 
 export default interface IAdsPointItem {
-    id: number;
-    address: string;
-    locationType: LocationType;
-    adsType: AdsType;
-    adsPointImage: string;
-    district: IDistrict;
-    ward: IWard;
-    lon: number;
-    lat: number;
-    isPlanned: boolean;
+    PointId: string;
+    Address: string;
+    LocationType: string;
+    AdvertisingForm: string;
+    Images: [string];
+    District: IDistrict;
+    Ward: IWard;
+    Coordinates: {
+        Longtitude: string,
+        Latitude: string
+    }
+    IsPlanned: boolean;
     // adsBoards: AdsBoardItem[] | null;
-    numberOfBoards: number;
+    NumberOfBoards: number;
 };
