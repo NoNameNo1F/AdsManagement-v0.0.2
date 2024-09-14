@@ -5,7 +5,6 @@ import { IAdsPointItem } from '../../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
 
-
 const AdsPointsList: React.FC = () => {
     const dispatch = useDispatch();
 
