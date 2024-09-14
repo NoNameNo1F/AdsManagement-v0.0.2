@@ -1,0 +1,101 @@
+.ads-board-item {
+  height: auto;
+  width: 90%;
+  padding: 5px 5px;
+  margin: 10px;
+  border: 1px solid var(--hover-color);
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(31, 42, 68, 0.15);
+  transition: all 250ms ease;
+}
+
+.ads-board-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 4px 10px rgba(31, 42, 68, 0.5);
+  color: var(--hover-color);
+  background-color: var(--object-color);
+}
+.ads-board-item:active {
+  border-color: var(--text-color-black);
+}
+
+.ads-board-title { 
+  margin: unset;
+  font: bold 16px Roboto, sans-serif;
+}
+
+.ads-board-item__summary {
+  text-wrap: nowrap;
+  font-size: 12px;
+}
+
+.ads-board-container {
+  top: 25%;
+  left: 20%;
+  height: auto;
+  width: 50%;
+  position: absolute;
+  z-index: 100;
+  background-color: var(--text-color);
+  color: var(--text-color-black);
+  border-radius: 10px;
+  border: 1px solid var(--object-color);
+}
+
+.ads-board__content {
+  padding: 10px;
+}
+.ads-board__title {
+  font: bold 26px Helvetica, Arial, sans-serif;
+  color: var(--object-color);
+}
+
+.ads-board__content-title {
+  font: bold 16px Roboto, Arial, sans-serif;
+}
+
+.ads-board-image img{
+    border-radius: 6px;
+    max-width: 100%;
+    margin: 15px;
+    box-shadow: 3px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.board-button {
+  height: 20%;
+  bottom: 0;
+  right: 0;
+} 
+
+.button {
+    height: 50%;
+    border-radius: 6px;
+    font: bold 14px Roboto, sans-serif;
+}
+
+.button-close {
+  border: 1px solid transparent;
+  background-color: var(--hover-color);
+  box-shadow: 2px 3px 10px rgba(0,0,84, 0.2);
+  transition: all 0.1s linear;
+}
+.button-close:hover, .button-close:focus {
+  background-color: var(--text-color-black);
+  color: var(--text-color);
+  box-shadow: 2px 3px 10px rgba(0,0,0, 0.4);
+}
+.button-report {
+  border: 1px solid #e71d36;
+  background-color: var(--text-color);
+  box-shadow: 2px 3px 10px rgba(255,0,84, 0.2);
+  color: #e71d36;
+  transition: all 0.1s ease-out;
+}
+.button-report:hover, .button-report:focus {
+  border: 1px solid var(--text-color);
+  background-color: #e71d36;
+  color: var(--text-color);
+  box-shadow: 2px 3px 10px rgba(255,0,84, 0.6);
+}
+
