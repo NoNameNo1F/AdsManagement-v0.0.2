@@ -8,13 +8,14 @@
 }
 
 .map-container {
-    height: 85vh;
+    height: 92vh;
     width: 100vw;
     background-color: var(--background-color);
     margin: 5px 0px;
     border-radius: 5px;
     box-shadow: 4px 4px 10px rgba(0,0,0,0.3), -4px -4px 10px rgba(0,0,0,0.3);
     position: relative;
+    overflow: hidden;
 }
 .search-container {
     position: absolute;

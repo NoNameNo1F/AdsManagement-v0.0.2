@@ -2,19 +2,47 @@ import axios from "axios";
 import { GeoJSON } from "ol/format";
 import { FeatureObject } from "ol/format/Feature";
 
-import { FeatureCollection } from "../../../interfaces";
+import { IAdsPointItem, IFeatureCollection } from "../../../interfaces";
+import { Point } from "ol/geom";
 
 const fetchAdsPoints = async ()=> {
-    const response = await axios.get('http://localhost:5000/api/geojson');
-    const geojson: FeatureCollection = {
-        type: "FeatureCollection",
-        features: response.data
-    }
-    if (geojson) {
-        return geojson;
-    } else {
-        throw new Error("Invalid GeoJSON data format [11_axios]: ");
-    }
+    const response = await axios.get('http://localhost:5000/api/adsPoints');
+
+    console.log(response);
+    const adsPoints: IAdsPointItem[] = response.data;
+    const featureObj: any = [];
+    const features = adsPoints.map((adsPoint: IAdsPointItem) => {
+        if (!adsPoint.Coordinates.Longtitude || !adsPoint.Coordinates.Latitude) {
+            console.warn("Invalid coordinates found for:", adsPoint);
+            return null;  // Skip invalid points
+        }
+        const feature = {
+            type: "Feature",
+            geometry: {
+                type: "Point",
+                coordinates: [
+                    parseFloat(adsPoint.Coordinates.Longtitude),
+                    parseFloat(adsPoint.Coordinates.Latitude)
+                ]
+            },
+            properties: {
+                text: adsPoint.Address
+            },
+            id: adsPoint.PointId
+        }
+        featureObj.push(feature);
+    })
+
+    const format = new GeoJSON();
+    const ft = format.readFeatures(
+        {
+            type: "FeatureCollection",
+            features: featureObj
+        },
+        {
+            featureProjection: "EPSG:3857"
+        })
+    return ft;
 };
 
 const saveAdsPoints = async (data: FeatureObject) => {
@@ -32,6 +60,7 @@ const fetchFeatures = async (url: string) => {
     try {
         const response = await axios.get(url);
         const data = response.data;
+        console.log(data)
         const filteredFeatures = data.features.filter((feature: any) => {
             const name = feature.properties.text;
             const type = feature.geometry.type;
