@@ -1,3 +1,5 @@
-import {AdsType} from "./adsType";
-import {LocationType} from "./locationType.ts"
-export { AdsType, LocationType };
+import {EAdvertisingForm} from "./advertisingForm";
+import { LocationType } from "./locationType.ts"
+import { EAdsBoardType } from "./boardType"
+
+export { EAdvertisingForm, EAdsBoardType, LocationType };
