@@ -1,9 +1,12 @@
 import React from 'react';
 import "./Header.css";
 import { ListArea } from '../../page/area';
-import { redirect } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { handleAdsContainer } from '../../../store/redux/AdsPoint/actions';
 const Header: React.FC = () => {
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <nav className="navbar navbar-expand-lg px-3">
       <div className="d-flex align-items-center w-100 justify-content-between">
@@ -12,14 +15,15 @@ const Header: React.FC = () => {
           <a href="/" className="navbar-brand">
             <img className="navbar-logo rounded-circle" src="/assets/images/logo-ads.jpg" alt="Logo" width="40" height="40" />
           </a>
-          <button className="btn mx-2">Dashboard</button>
+          <button className="btn mx-2" onClick={() => navigate('/dashboard')}><i className="bi bi-house-door-fill"></i>&nbsp;Dashboard</button>
           <div className="dropdown">
             <button
-              className="btn dropdown-toggle"
+              className="btn"
               id="selectRegionsDropdown"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
+              <i className="bi bi-geo-fill"></i>&nbsp;
               Select Regions
             </button>
             <ul className="dropdown-menu" aria-labelledby="selectRegionsDropdown">
@@ -31,18 +35,10 @@ const Header: React.FC = () => {
         {/* Navbar Right */}
         <div className="d-flex align-items-center">
           <div className="navbar-right-item text-center mx-3">
-            <i className="bi bi-card-heading" />
-            <span className="d-block small" onClick={() => alert('search anya ha <3')}>Ads Points</span>
+            <i className="bi bi-newspaper"></i>
+            <span className="d-block small" onClick={() => dispatch(handleAdsContainer(true))}>News</span>
           </div>
-          <div className="navbar-right-item text-center mx-3">
-            <i className="bi bi-globe-asia-australia"></i>
-            <span className="d-block small">Language</span>
-          </div>
-          {/* <div className="navbar-right-item text-center mx-3" onClick={() => alert('search anya ha <3')}>
-            <i className="bi bi-search"></i>
-            <span className="d-block small">Search</span>
-          </div> */}
-          <div className="navbar-right-item text-center mx-3" onClick={() => ('https://keycloak.codedynamite.click/login')}>
+          <div className="navbar-right-item text-center mx-3" onClick={() => navigate('/login')}>
             <i className="bi bi-box-arrow-in-right"></i>
             <span className="d-block small">Login</span>
           </div>
