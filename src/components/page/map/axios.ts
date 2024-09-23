@@ -1,22 +1,7 @@
 import axios from "axios";
 import { GeoJSON } from "ol/format";
-import { FeatureObject } from "ol/format/Feature";
-
-<<<<<<< Updated upstream
+import { FeatureObject } from "ol/format/Feature";m
 import { FeatureCollection } from "../../../interfaces";
-
-const fetchAdsPoints = async ()=> {
-    const response = await axios.get('http://localhost:5000/api/geojson');
-    const geojson: FeatureCollection = {
-        type: "FeatureCollection",
-        features: response.data
-    }
-    if (geojson) {
-        return geojson;
-    } else {
-        throw new Error("Invalid GeoJSON data format [11_axios]: ");
-    }
-=======
 import { IAdsPointItem } from "../../../interfaces";
 import IApiResponse from "../../../interfaces/apiResponse";
 import { ADS_POINT_API } from "../../../constants/baseUrls";
@@ -60,7 +45,6 @@ const fetchAdsPoints = async ()=> {
             featureProjection: "EPSG:3857"
         })
     return ft;
->>>>>>> Stashed changes
 };
 
 const saveAdsPoints = async (data: FeatureObject) => {
@@ -78,6 +62,7 @@ const fetchFeatures = async (url: string) => {
     try {
         const response = await axios.get(url);
         const data = response.data;
+        console.log(data)
         const filteredFeatures = data.features.filter((feature: any) => {
             const name = feature.properties.text;
             const type = feature.geometry.type;

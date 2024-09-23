@@ -20,17 +20,10 @@ export const getBaseLayer = (key: string) => {
 export const getUpperBaseLayer = (key: string) => {
     return new VectorLayer({
         source: new VectorSource({
-<<<<<<< Updated upstream
-            url: `https://api.maptiler.com/data/5dd8ce8b-d67c-44b8-9052-f58aa9f71427/features.json?key=${key}`,
-            format: new GeoJSON(),
-            loader: async function (extent, resolution, projection) {
-                const url = `https://api.maptiler.com/data/5dd8ce8b-d67c-44b8-9052-f58aa9f71427/features.json?key=${key}`;
-=======
             url: `${MAPTILER_VECTOR_SOURCE_URL}?key=${key}`,
             format: new GeoJSON(),
             loader: async function (extent, resolution, projection) {
                 const url = `${MAPTILER_VECTOR_SOURCE_URL}?key=${key}`;
->>>>>>> Stashed changes
                 const features: any = await fetchFeatures(url);
                 (this as unknown as VectorSource).addFeatures(features);
             }

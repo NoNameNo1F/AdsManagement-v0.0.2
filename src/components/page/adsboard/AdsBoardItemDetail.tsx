@@ -19,7 +19,7 @@ const ModalAdsBoardItemDetail: React.FC = () => {
             Ward - District:
           </span>
           <p className="d-inline-block col-7">
-            {adsBoardItem.AdsPoint.ward.name} - {adsBoardItem.AdsPoint.district.districtName}
+            {adsBoardItem.AdsPoint.ward.wardName} - {adsBoardItem.AdsPoint.district.districtName}
           </p>
         </div>
         <div className="row">

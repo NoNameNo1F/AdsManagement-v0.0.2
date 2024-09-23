@@ -49,9 +49,12 @@ import { Coordinate } from 'ol/coordinate';
 import "./MapDisplay.css";
 import { clearTimeout } from 'timers';
 import { AdsContainer, AdsPointsList } from '../adspoint';
-import { SelectedFeatureInfo } from '../../../interfaces';
+import { ISelectedFeatureInfo } from '../../../interfaces';
 import { getAdsPointLayerStyle, getBaseLayer, getClusterLayerStyle, getUpperBaseLayer, getUpperBaseLayerStyle, mapHoverInteraction, mapDrawPointInteraction, mapSelectInteraction } from "../../../utils/map-utils";
 import toastNotify from '../../../utils/toastNotify';
+import { ModalAdsBoardItemDetail } from '../adsboard';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store/redux/store';
 
 const formatCoordinate = (coordinate: any) => {
     const lonLat = toLonLat(coordinate);
@@ -84,8 +87,9 @@ const overviewMapControl = new OverviewMap({
 
 const MapDisplay: React.FC = () => {
     const key = import.meta.env.VITE_MAP_API;
-
-    const [selectedFeatureInfo, setSelectedFeatureInfo] = useState<SelectedFeatureInfo | null>(null);
+    const distpatch = useDispatch();
+    const adsBoardDisplay = useSelector((state: RootState) => state.adsPoint.selectedAdsBoardItem);
+    const [selectedFeatureInfo, setSelectedFeatureInfo] = useState<ISelectedFeatureInfo | null>(null);
     const [drawInteraction, setDrawInteraction] = useState(new Draw({ type: 'Point' }));
 
     const [isDrawEnabled, setIsDrawEnabled] = useState(false);
@@ -105,10 +109,13 @@ const MapDisplay: React.FC = () => {
     const adsPointsSource = new VectorSource({
         format: new GeoJSON(),
         loader: async function (extent, resolution, projection) {
-            const features: any = await loadAdsPoints();
+            // const features: any = await loadAdsPoints();
+            const features: any = await fetchAdsPoints();
             (this as unknown as VectorSource).addFeatures(features);
         }
     });
+    console.log(adsPointsSource);
+    console.log(adsPointsSource.getFeatures());
     const clusterSource = new Cluster({
         distance: 50,
         source: adsPointsSource,
@@ -220,10 +227,10 @@ const MapDisplay: React.FC = () => {
                 <p><strong>Coordinates:</strong> {selectedFeatureInfo?.coordinates?.join(', ') || 'N/A'}</p>
                 <button className="ads-popup-button" onClick={closePopUp}>Close</button>
             </div>
-            {/* {displayAdsPointList && (
-                <AdsContainer />
-                // <AdsPointsList />
-            )} */}
+            {adsBoardDisplay && (
+                <ModalAdsBoardItemDetail />
+            )}
+
             <AdsContainer />
             <button onClick={toggleDrawInteraction} className="position-absolute bottom-50 z-1">
                 {isDrawEnabled ? 'Disable Drawing' : 'Enable Drawing'}
