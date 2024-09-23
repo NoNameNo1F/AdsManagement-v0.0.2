@@ -1,7 +1,6 @@
 import axios from "axios";
 import { GeoJSON } from "ol/format";
-import { FeatureObject } from "ol/format/Feature";m
-import { FeatureCollection } from "../../../interfaces";
+import { FeatureObject } from "ol/format/Feature";
 import { IAdsPointItem } from "../../../interfaces";
 import IApiResponse from "../../../interfaces/apiResponse";
 import { ADS_POINT_API } from "../../../constants/baseUrls";

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
 import { IAdsBoardItem, IAdsPointItem } from '../../../interfaces';
 import { selectAdsPoint } from '../../../store/redux/AdsPoint/actions';
-import { AdsBoardItem } from '../adsboard';
 
 const AdsPointItemDetail: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
     const boards: IAdsBoardItem[] = useSelector((state: RootState) => state.adsPoint.adsBoardsList);
@@ -44,7 +43,8 @@ const AdsPointItemDetail: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem
                         </button>
                     </div>
                 </div>
-                {/* <div className="boards-section">
+            </div>
+            {/* <div className="boards-section">
                     <h4>Advertisement Boards</h4>
                     {adsPointItem.adsBoards?.map((board, index) => (
                         <div key={index} className="board-item">
@@ -54,6 +54,7 @@ const AdsPointItemDetail: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem
                         </div>
                     ))}
                 </div> */}
+        </div>
     );
 };
 

@@ -10,273 +10,28 @@ interface AdsState {
     showAds: boolean;
 }
 
-// const initialState: AdsState = {
-//     adsTitle: "",
-//     adsPointsList: [],
-//     adsBoardsList: [],
-//     selectedAdsPointItem: null,
-//     showAds: false,
-// };
 const initialState: AdsState = {
     adsTitle: "",
+    adsBoardsList: [
+
+    ],
     adsPointsList: [
         {
-            PointId: "1231412",
-            Address: "123 Main St, District 1",
-            LocationType: "BUS_STOP",
-            AdvertisingForm: "POLITICAL_PROMOTION",
-            Images: ["image1.jpg"],
-            District: { id: 1, name: "District 1" },
-            Ward: { id: 101, name: "Ward 101" },
-            Coordinates: {
-                Longtitude: "106.6958",
-                Latitude: "10.7626"
+            pointId: "1231412",
+            address: "123 Main St, District 1",
+            locationType: "BUS_STOP",
+            advertisingForm: "POLITICAL_PROMOTION",
+            images: ["image1.jpg"],
+            district: { districtId: 1, districtName: "District 1" },
+            ward: { wardId: 101, wardName: "Ward 101" },
+            coordinates: {
+                longtitude: "106.6958",
+                latitude: "10.7626"
             },
-            IsPlanned: true,
-            NumberOfBoards: 3,
+            isPlanned: true,
+            numberOfBoards: 3,
         },
-        {
-            PointId: "1231412",
-            Address: "123 Main St, District 1",
-            LocationType: "BUS_STOP",
-            AdvertisingForm: "POLITICAL_PROMOTION",
-            Images: ["image1.jpg"],
-            District: { id: 1, name: "District 1" },
-            Ward: { id: 101, name: "Ward 101" },
-            Coordinates: {
-                Longtitude: "106.6958",
-                Latitude: "10.7626"
-            },
-            IsPlanned: true,
-            NumberOfBoards: 3,
-        },
-        {
-            PointId: "1231412",
-            Address: "123 Main St, District 1",
-            LocationType: "BUS_STOP",
-            AdvertisingForm: "POLITICAL_PROMOTION",
-            Images: ["image1.jpg"],
-            District: { id: 1, name: "District 1" },
-            Ward: { id: 101, name: "Ward 101" },
-            Coordinates: {
-                Longtitude: "106.6958",
-                Latitude: "10.7626"
-            },
-            IsPlanned: true,
-            NumberOfBoards: 3,
-        },
-        {
-            PointId: "1231412",
-            Address: "123 Main St, District 1",
-            LocationType: "BUS_STOP",
-            AdvertisingForm: "POLITICAL_PROMOTION",
-            Images: ["image1.jpg"],
-            District: { id: 1, name: "District 1" },
-            Ward: { id: 101, name: "Ward 101" },
-            Coordinates: {
-                Longtitude: "106.6958",
-                Latitude: "10.7626"
-            },
-            IsPlanned: true,
-            NumberOfBoards: 3,
-        },
-        {
-            PointId: "1231412",
-            Address: "123 Main St, District 1",
-            LocationType: "BUS_STOP",
-            AdvertisingForm: "POLITICAL_PROMOTION",
-            Images: ["image1.jpg"],
-            District: { id: 1, name: "District 1" },
-            Ward: { id: 101, name: "Ward 101" },
-            Coordinates: {
-                Longtitude: "106.6958",
-                Latitude: "10.7626"
-            },
-            IsPlanned: true,
-            NumberOfBoards: 3,
-        },
-        {
-            PointId: "1231412",
-            Address: "123 Main St, District 1",
-            LocationType: "BUS_STOP",
-            AdvertisingForm: "POLITICAL_PROMOTION",
-            Images: ["image1.jpg"],
-            District: { id: 1, name: "District 1" },
-            Ward: { id: 101, name: "Ward 101" },
-            Coordinates: {
-                Longtitude: "106.6958",
-                Latitude: "10.7626"
-            },
-            IsPlanned: true,
-            NumberOfBoards: 3,
-        },
-        {
-            PointId: "1231412",
-            Address: "123 Main St, District 1",
-            LocationType: "BUS_STOP",
-            AdvertisingForm: "POLITICAL_PROMOTION",
-            Images: ["image1.jpg"],
-            District: { id: 1, name: "District 1" },
-            Ward: { id: 101, name: "Ward 101" },
-            Coordinates: {
-                Longtitude: "106.6958",
-                Latitude: "10.7626"
-            },
-            IsPlanned: true,
-            NumberOfBoards: 3,
-        },
-    ],
-    adsBoardsList: [
-        {
-            Id: "1",
-            AdsPoint: {
-                PointId: "1231412",
-                Address: "123 Main St, District 1",
-                LocationType: "BUS_STOP",
-                AdvertisingForm: "POLITICAL_PROMOTION",
-                Images: ["image1.jpg"],
-                District: { id: 1, name: "District 1" },
-                Ward: { id: 101, name: "Ward 101" },
-                Coordinates: {
-                    Longtitude: "106.6958",
-                    Latitude: "10.7626"
-                },
-                IsPlanned: true,
-                NumberOfBoards: 3,
-            },
-            AdsBoardType: "HIFLEX_BILLBOARD_STAND",
-            Size: "1.2x2m",
-            Quantity: 1,
-            Image: "zzz",
-            ExpiredDate: "2022-01-01",
-            CompanyContact: {
-                Id: "1",
-                Name: "Cuu toi",
-                Email: "qkD5w@example.com",
-                Phone: "0123456789",
-                Address: "dasbgbasdjcnasnlasnlfnsalk"
-            }
-        },
-        {
-            Id: "1",
-            AdsPoint: {
-                PointId: "1231412",
-                Address: "123 Main St, District 1",
-                LocationType: "BUS_STOP",
-                AdvertisingForm: "POLITICAL_PROMOTION",
-                Images: ["image1.jpg"],
-                District: { id: 1, name: "District 1" },
-                Ward: { id: 101, name: "Ward 101" },
-                Coordinates: {
-                    Longtitude: "106.6958",
-                    Latitude: "10.7626"
-                },
-                IsPlanned: true,
-                NumberOfBoards: 3,
-            },
-            AdsBoardType: "HIFLEX_BILLBOARD_STAND",
-            Size: "1.2x2m",
-            Quantity: 1,
-            Image: "zzz",
-            ExpiredDate: "2022-01-01",
-            CompanyContact: {
-                Id: "1",
-                Name: "Cuu toi",
-                Email: "qkD5w@example.com",
-                Phone: "0123456789",
-                Address: "dasbgbasdjcnasnlasnlfnsalk"
-            }
-        },
-        {
-            Id: "1",
-            AdsPoint: {
-                PointId: "1231412",
-                Address: "123 Main St, District 1",
-                LocationType: "BUS_STOP",
-                AdvertisingForm: "POLITICAL_PROMOTION",
-                Images: ["image1.jpg"],
-                District: { id: 1, name: "District 1" },
-                Ward: { id: 101, name: "Ward 101" },
-                Coordinates: {
-                    Longtitude: "106.6958",
-                    Latitude: "10.7626"
-                },
-                IsPlanned: true,
-                NumberOfBoards: 3,
-            },
-            AdsBoardType: "HIFLEX_BILLBOARD_STAND",
-            Size: "1.2x2m",
-            Quantity: 1,
-            Image: "zzz",
-            ExpiredDate: "2022-01-01",
-            CompanyContact: {
-                Id: "1",
-                Name: "Cuu toi",
-                Email: "qkD5w@example.com",
-                Phone: "0123456789",
-                Address: "dasbgbasdjcnasnlasnlfnsalk"
-            }
-        },
-        {
-            Id: "1",
-            AdsPoint: {
-                PointId: "1231412",
-                Address: "123 Main St, District 1",
-                LocationType: "BUS_STOP",
-                AdvertisingForm: "POLITICAL_PROMOTION",
-                Images: ["image1.jpg"],
-                District: { id: 1, name: "District 1" },
-                Ward: { id: 101, name: "Ward 101" },
-                Coordinates: {
-                    Longtitude: "106.6958",
-                    Latitude: "10.7626"
-                },
-                IsPlanned: true,
-                NumberOfBoards: 3,
-            },
-            AdsBoardType: "HIFLEX_BILLBOARD_STAND",
-            Size: "1.2x2m",
-            Quantity: 1,
-            Image: "zzz",
-            ExpiredDate: "2022-01-01",
-            CompanyContact: {
-                Id: "1",
-                Name: "Cuu toi",
-                Email: "qkD5w@example.com",
-                Phone: "0123456789",
-                Address: "dasbgbasdjcnasnlasnlfnsalk"
-            }
-        },
-        {
-            Id: "1",
-            AdsPoint: {
-                PointId: "1231412",
-                Address: "123 Main St, District 1",
-                LocationType: "BUS_STOP",
-                AdvertisingForm: "POLITICAL_PROMOTION",
-                Images: ["image1.jpg"],
-                District: { id: 1, name: "District 1" },
-                Ward: { id: 101, name: "Ward 101" },
-                Coordinates: {
-                    Longtitude: "106.6958",
-                    Latitude: "10.7626"
-                },
-                IsPlanned: true,
-                NumberOfBoards: 3,
-            },
-            AdsBoardType: "HIFLEX_BILLBOARD_STAND",
-            Size: "1.2x2m",
-            Quantity: 1,
-            Image: "zzz",
-            ExpiredDate: "2022-01-01",
-            CompanyContact: {
-                Id: "1",
-                Name: "Cuu toi",
-                Email: "qkD5w@example.com",
-                Phone: "0123456789",
-                Address: "dasbgbasdjcnasnlasnlfnsalk"
-            }
-        },
+        
     ],
     selectedAdsPointItem: null,
     selectedAdsBoardItem: null,
@@ -289,7 +44,7 @@ const adsReducer = (state: AdsState = initialState, action: any) => {
             return {
                 ...state,
                 showAds: !state.showAds,
-                adsTitle: state.selectedAdsPointItem ? state.selectedAdsPointItem.Address : "Ads Points List"
+                adsTitle: state.selectedAdsPointItem ? state.selectedAdsPointItem.address : "Ads Points List"
             };
         case actionTypes.SELECT_ADS_POINT:
             return {

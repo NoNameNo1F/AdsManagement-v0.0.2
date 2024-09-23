@@ -16,5 +16,5 @@ export default interface IAdsPointItem {
     }
     isPlanned: boolean;
     // adsBoards: AdsBoardItem[] | null;
-    NumberOfBoards: number;
+    numberOfBoards: number;
 };

@@ -18,7 +18,7 @@ const AdsPointsList: React.FC = () => {
         if (!searchInput) {
             return adsPointsList;
         }
-        return adsPointsList.filter((adsPoint) => adsPoint.Address.toLowerCase().includes(searchInput));
+        return adsPointsList.filter((adsPoint) => adsPoint.address.toLowerCase().includes(searchInput));
     }, [searchInput, adsPointsList]);
     return (
         <div className="col-12">
