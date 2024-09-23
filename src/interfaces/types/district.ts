@@ -1,4 +1,4 @@
 export default interface IDistrict {
-    id: number;
-    name: string;
+    districtId: number;
+    districtName: string;
 }

@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import "./AdsPoint.css";
 import AdsPointsList from './AdsPointsList';
 import AdsPointItemDetail from './AdsPointItemDetail';

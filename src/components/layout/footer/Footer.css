@@ -1,17 +1,11 @@
 .footerr {
     height: 5vh;
     padding: 10px 0px;
-    background:
-    linear-gradient(
-      to right,
-      rgba(255, 0, 0, 1),
-      rgba(255, 0, 180, 1),
-      rgba(0, 100, 200, 1)
-    );
+    background: linear-gradient( to right, rgba(255, 0, 0, 1), rgba(255, 0, 180, 1), rgba(0, 100, 200, 1));
     background-size: 0 100px;
     background-position: 0 100%;
     background-repeat: no-repeat;
-  transition: background-size 1500ms, color 1000ms;
+    transition: background-size 1500ms, color 1000ms;
     color: #003140;
     display: flex;
     align-items: center;

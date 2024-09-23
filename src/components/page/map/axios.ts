@@ -2,6 +2,7 @@ import axios from "axios";
 import { GeoJSON } from "ol/format";
 import { FeatureObject } from "ol/format/Feature";
 
+<<<<<<< Updated upstream
 import { FeatureCollection } from "../../../interfaces";
 
 const fetchAdsPoints = async ()=> {
@@ -15,6 +16,51 @@ const fetchAdsPoints = async ()=> {
     } else {
         throw new Error("Invalid GeoJSON data format [11_axios]: ");
     }
+=======
+import { IAdsPointItem } from "../../../interfaces";
+import IApiResponse from "../../../interfaces/apiResponse";
+import { ADS_POINT_API } from "../../../constants/baseUrls";
+
+const fetchAdsPoints = async ()=> {
+    const response : IApiResponse = await axios.get(ADS_POINT_API);
+    const adsPoints = response.data?.result!; 
+
+    console.log(adsPoints);
+
+    const featureObj: any = [];
+    const features = adsPoints.map((adsPoint: IAdsPointItem) => {
+        if (!adsPoint.coordinates.longtitude || !adsPoint.coordinates.latitude) {
+            console.warn("Invalid coordinates found for:", adsPoint);
+            return null;  // Skip invalid points
+        }
+        const feature = {
+            type: "Feature",
+            geometry: {
+                type: "Point",
+                coordinates: [
+                    parseFloat(adsPoint.coordinates.longtitude),
+                    parseFloat(adsPoint.coordinates.latitude)
+                ]
+            },
+            properties: {
+                text: adsPoint.address
+            },
+            id: adsPoint.pointId
+        }
+        featureObj.push(feature);
+    })
+
+    const format = new GeoJSON();
+    const ft = format.readFeatures(
+        {
+            type: "FeatureCollection",
+            features: featureObj
+        },
+        {
+            featureProjection: "EPSG:3857"
+        })
+    return ft;
+>>>>>>> Stashed changes
 };
 
 const saveAdsPoints = async (data: FeatureObject) => {

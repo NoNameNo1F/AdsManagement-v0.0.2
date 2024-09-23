@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import React, { ChangeEvent, useMemo, useState } from 'react';
 import "./AdsPoint.css";
 import AdsPointItem from './AdsPointItem';
 import { IAdsPointItem } from '../../../interfaces';

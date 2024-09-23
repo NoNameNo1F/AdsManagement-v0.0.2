@@ -1,8 +1,7 @@
 import React from 'react';
 import './AdsPoint.css';
 import { IAdsPointItem } from '../../../interfaces';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store/redux/store';
+import { useDispatch } from 'react-redux';
 import { selectAdsPoint } from '../../../store/redux/AdsPoint/actions';
 
 const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
@@ -28,7 +27,11 @@ const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
             <span className="fw-medium">
               Type of Ads:
             </span>
+<<<<<<< Updated upstream
             &nbsp;{adsPointItem.adsType}
+=======
+            &nbsp;{adsPointItem.advertisingForm}
+>>>>>>> Stashed changes
           </div>
           <div className="ads-point-item__summary">
             <span className="fw-medium">
@@ -40,7 +43,11 @@ const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
             <span className="fw-medium">
               Area:
             </span>
+<<<<<<< Updated upstream
             &nbsp;{adsPointItem.ward.name} - {adsPointItem.district.name}
+=======
+            &nbsp;{adsPointItem.ward.wardname} - {adsPointItem.district.districtName}
+>>>>>>> Stashed changes
           </div>
           <div className="ads-point-item__summary">
             <span className="fw-medium">

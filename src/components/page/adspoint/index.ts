@@ -4,5 +4,4 @@ import AdsPointContainer from "./AdsPointContainer";
 import AdsPointsList from "./AdsPointsList";
 import AdsPointItemDetail from "./AdsPointItemDetail";
 
-
 export { AdsPointItem, AdsContainer, AdsPointContainer, AdsPointsList, AdsPointItemDetail };

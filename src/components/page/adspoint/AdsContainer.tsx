@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import "./AdsPoint.css";
 import AdsPointContainer from './AdsPointContainer';
 import { useDispatch, useSelector } from 'react-redux';
