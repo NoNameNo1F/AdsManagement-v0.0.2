@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 const Modal = (message: string) => {
     return (
         <div>

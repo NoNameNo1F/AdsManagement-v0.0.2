@@ -1,4 +1,4 @@
 export default interface IWard {
-    id: number;
-    name: string;
+    wardId: number;
+    wardname: string;
 }

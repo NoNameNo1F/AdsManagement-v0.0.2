@@ -1,0 +1,2 @@
+export const MAPTILER_BASE_LAYER_URL = "https://api.maptiler.com/maps/openstreetmap/tiles.json";
+export const MAPTILER_VECTOR_SOURCE_URL = "https://api.maptiler.com/data/2abfad35-6bae-49bc-88ca-3cb3015d8896/features.json";
