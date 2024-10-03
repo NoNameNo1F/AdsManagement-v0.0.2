@@ -27,15 +27,6 @@
 }
 
 .ads-container--hide {
-<<<<<<< HEAD
-  width: 0px;
-  border-radius: 5px;
-}
-
-.ads-container--show {
-  width: 390px;
-  border-radius: 10px;
-=======
     width: 0px;
     border-radius: 5px;
 }
@@ -43,7 +34,6 @@
 .ads-container--show {
     width: 390px;
     border-radius: 10px;
->>>>>>> 18215b72c3fd733bdb16be7e02c3c1c6ff1a6cb9
 }
 
 .ads-header {
@@ -53,23 +43,6 @@
 }
 
 .ads-icon-button {
-<<<<<<< HEAD
-  position: absolute;
-  background: var(--text-color-black);
-  color: var(--text-color);
-  border: 1px solid var(--background-color);
-  border-radius: 20px;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  transform: translateX(-100%);
-  transition: all 0.25s ease;
-=======
     position: absolute;
     background: var(--text-color-black);
     color: var(--text-color);
@@ -85,7 +58,6 @@
     padding: 10px;
     transform: translateX(-100%);
     transition: all 0.25s ease;
->>>>>>> 18215b72c3fd733bdb16be7e02c3c1c6ff1a6cb9
 }
 
 .ads-icon-button--expanded {
@@ -140,18 +112,6 @@
 /* Ads Point Container */
 
 .ads-point-container {
-<<<<<<< HEAD
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  position: relative;
-  background-color: var(--text-color);
-  height: 89%;
-  width: 90%;
-  border: 1px solid var(--background-color);
-  border-radius: 10px;
-  transition: all 0.25s ease;
-=======
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -162,7 +122,7 @@
     border: 1px solid var(--background-color);
     border-radius: 10px;
     transition: all 0.25s ease;
->>>>>>> 18215b72c3fd733bdb16be7e02c3c1c6ff1a6cb9
+
 }
 
 
@@ -252,27 +212,6 @@
     font-size: 12px;
 }
 
-<<<<<<< HEAD
-.ads-point-item__image img{
-  height: 80px;
-  width 76px;
-  justify-content: flex-end;
-  border-radius: 5px;
-  margin: 0 0 8px 8px;
-  box-shadow: 1px 1px 10px rgba(255,255,255,0.4), -1px -1px 10px rgba(255,255,255,0.4);
-  transition: all 0.2s ease;
-}
-
-.ads-point-item__image img:hover{
-  box-shadow: 1px 1px 10px rgba(255,255,255,0.6), -1px -1px 10px rgba(255,255,255,0.6);
-}
-
-/* Ads Point Item Detail */
-
-.ads-boards-list {
-  height: 61vh;
-  width: 100%;
-=======
 .ads-point-item__image img {
     height: 80px;
     width: 76px;
@@ -287,39 +226,15 @@
     box-shadow: 1px 1px 10px rgba(255, 255, 255, 0.6), -1px -1px 10px rgba(255, 255, 255, 0.6);
 }
 
-
 /* Ads Point Item Detail */
 
 .ads-boards-list {
     height: 61vh;
     width: 100%;
->>>>>>> 18215b72c3fd733bdb16be7e02c3c1c6ff1a6cb9
 }
 
 .ads-point-item-detail {
     margin: 10px;
-<<<<<<< HEAD
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.ads-point-item-detail::-webkit-scrollbar {
-  width: 0px;
-}
-
-.ads-point-item-details__image img{
-  height: 100%;
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid var(--background-color);
-  box-shadow: 4px 4px 10px rgba(31, 42, 68, 0.15);
-}
-
-.ads-point-item-details__info {
-  margin: 10px 0px;
-  font: 14px Roboto, Arial, sans-serif;
-  display: block;
-=======
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -340,7 +255,6 @@
     margin: 10px 0px;
     font: 14px Roboto, Arial, sans-serif;
     display: block;
->>>>>>> 18215b72c3fd733bdb16be7e02c3c1c6ff1a6cb9
 }
 
 .ads-point-item-details.approved {
@@ -352,40 +266,6 @@
 }
 
 .button {
-<<<<<<< HEAD
-  height: 100%;
-  padding: 6px;
-  width: 100%;
-  margin: 10px;
-  border-radius: 6px;
-  font: bold 14px Roboto, sans-serif;
-  align-content: center;
-}
-
-.button-close {
-  border: 1px solid transparent;
-  background-color: var(--hover-color);
-  box-shadow: 2px 3px 10px rgba(0,0,84, 0.2);
-  transition: all 0.1s linear;
-}
-.button-close:hover, .button-close:focus {
-  background-color: var(--text-color-black);
-  color: var(--text-color);
-  box-shadow: 2px 3px 10px rgba(0,0,0, 0.4);
-}
-.button-report {
-  border: 1px solid #e71d36;
-  background-color: var(--text-color);
-  box-shadow: 2px 3px 10px rgba(255,0,84, 0.2);
-  color: #e71d36;
-  transition: all 0.1s ease-out;
-}
-.button-report:hover, .button-report:focus {
-  border: 1px solid var(--text-color);
-  background-color: #e71d36;
-  color: var(--text-color);
-  box-shadow: 2px 3px 10px rgba(255,0,84, 0.6);
-=======
     height: 100%;
     padding: 6px;
     width: 100%;
@@ -423,5 +303,4 @@
     background-color: #e71d36;
     color: var(--text-color);
     box-shadow: 2px 3px 10px rgba(255, 0, 84, 0.6);
->>>>>>> 18215b72c3fd733bdb16be7e02c3c1c6ff1a6cb9
 }
