@@ -3,18 +3,18 @@ import IDistrict from "./types/district";
 import IWard from "./types/ward";
 
 export default interface IAdsPointItem {
-    PointId: string;
-    Address: string;
-    LocationType: string;
-    AdvertisingForm: string;
-    Images: [string];
-    District: IDistrict;
-    Ward: IWard;
-    Coordinates: {
-        Longtitude: string,
-        Latitude: string
+    pointId: string;
+    address: string;
+    locationType: string;
+    advertisingForm: string;
+    images: [string];
+    district: IDistrict;
+    ward: IWard;
+    coordinates: {
+        longtitude: string,
+        latitude: string
     }
-    IsPlanned: boolean;
+    isPlanned: boolean;
     // adsBoards: AdsBoardItem[] | null;
-    NumberOfBoards: number;
+    numberOfBoards: number;
 };

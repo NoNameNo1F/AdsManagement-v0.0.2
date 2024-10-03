@@ -12,7 +12,6 @@ const initialState: AuthState = {
     user: null,
 };
 
-
 const authReducer = (state: AuthState = initialState, action: any) => {
     switch (action.type) {
         case actionTypes.SET_USER_CREDENTIALS:

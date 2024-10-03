@@ -1,18 +1,19 @@
 import axios from "axios";
 import { GeoJSON } from "ol/format";
 import { FeatureObject } from "ol/format/Feature";
-
-import { IAdsPointItem, IFeatureCollection } from "../../../interfaces";
-import { Point } from "ol/geom";
+import { IAdsPointItem } from "../../../interfaces";
+import IApiResponse from "../../../interfaces/apiResponse";
+import { ADS_POINT_API } from "../../../constants/baseUrls";
 
 const fetchAdsPoints = async ()=> {
-    const response = await axios.get('http://localhost:5000/api/adsPoints');
+    const response : IApiResponse = await axios.get(ADS_POINT_API);
+    const adsPoints = response.data?.result!; 
 
-    console.log(response);
-    const adsPoints: IAdsPointItem[] = response.data;
+    console.log(adsPoints);
+
     const featureObj: any = [];
     const features = adsPoints.map((adsPoint: IAdsPointItem) => {
-        if (!adsPoint.Coordinates.Longtitude || !adsPoint.Coordinates.Latitude) {
+        if (!adsPoint.coordinates.longtitude || !adsPoint.coordinates.latitude) {
             console.warn("Invalid coordinates found for:", adsPoint);
             return null;  // Skip invalid points
         }
@@ -21,14 +22,14 @@ const fetchAdsPoints = async ()=> {
             geometry: {
                 type: "Point",
                 coordinates: [
-                    parseFloat(adsPoint.Coordinates.Longtitude),
-                    parseFloat(adsPoint.Coordinates.Latitude)
+                    parseFloat(adsPoint.coordinates.longtitude),
+                    parseFloat(adsPoint.coordinates.latitude)
                 ]
             },
             properties: {
-                text: adsPoint.Address
+                text: adsPoint.address
             },
-            id: adsPoint.PointId
+            id: adsPoint.pointId
         }
         featureObj.push(feature);
     })

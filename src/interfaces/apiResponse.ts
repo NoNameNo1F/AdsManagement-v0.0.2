@@ -1,11 +1,11 @@
+import IAdsPointItem from "./adsPointItem";
+
 export default interface IApiResponse {
     data?: {
         statusCode?: number;
         isSuccess?: boolean;
-        errorMessages?: Array<string>;
-        result?: {
-        [key: string]: string;
-        };
+        errors?: Array<string>;
+        result?: any;
     };
     error?: any;
 }

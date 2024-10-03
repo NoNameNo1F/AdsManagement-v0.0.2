@@ -1,10 +1,9 @@
-import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import React, { ChangeEvent, useMemo, useState } from 'react';
 import "./AdsPoint.css";
 import AdsPointItem from './AdsPointItem';
 import { IAdsPointItem } from '../../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
-
 
 const AdsPointsList: React.FC = () => {
     const dispatch = useDispatch();
@@ -19,7 +18,7 @@ const AdsPointsList: React.FC = () => {
         if (!searchInput) {
             return adsPointsList;
         }
-        return adsPointsList.filter((adsPoint) => adsPoint.Address.toLowerCase().includes(searchInput));
+        return adsPointsList.filter((adsPoint) => adsPoint.address.toLowerCase().includes(searchInput));
     }, [searchInput, adsPointsList]);
     return (
         <div className="col-12">

@@ -18,17 +18,17 @@ const AdsPointItemDetail: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem
                 </div>
                 <div className="col">
                     <div className="ads-point-item-details__info">
-                        <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.Ward.name} - {adsPointItem.District.name}
+                        <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.ward.wardname} - {adsPointItem.district.districtName}
                     </div>
                     <div className="ads-point-item-details__info">
-                        <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.AdvertisingForm}
+                        <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.advertisingForm}
                     </div>
                     <div className="ads-point-item-details__info">
-                        <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.LocationType}
+                        <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.locationType}
                     </div>
                     <div className="ads-point-item-details__info">
                         <span className="fw-medium"></span> &nbsp;
-                        {adsPointItem.IsPlanned ? (
+                        {adsPointItem.isPlanned ? (
                             <i className="bi bi-patch-check-fill ads-point-item-details approved">Planned</i>
                         ) : (
                             <i className="bi bi-exclamation-triangle-fill ads-point-item-details not-approved">Wait for Approval</i>
@@ -45,14 +45,16 @@ const AdsPointItemDetail: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem
                     </div>
                 </div>
             </div>
-            <div className="ads-boards-list">
-                {boards.map((board, index) => (
-                    <AdsBoardItem
-                        key={index}
-                        {...board}
-                    />
-                ))}
-            </div>
+            {/* <div className="boards-section">
+                    <h4>Advertisement Boards</h4>
+                    {adsPointItem.adsBoards?.map((board, index) => (
+                        <div key={index} className="board-item">
+                            <p>Company Name: {board.companyContacts.companyName}</p>
+                            <p>Board Type: {board.adBoardType}</p>
+                            <p>Size: {board.size}</p>
+                        </div>
+                    ))}
+                </div> */}
         </div>
     );
 };

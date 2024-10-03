@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IAdsBoardItem } from '../../../interfaces';
 import { RootState } from '../../../store/redux/store';
@@ -13,14 +12,14 @@ const ModalAdsBoardItemDetail: React.FC = () => {
     <div className="ads-board-container d-flex justify-content-center align-content-between">
       <div className="ads-board__content col-6">
         <div className="ads-board__title d-block pb-3">
-          <span> {adsBoardItem.AdsPoint.Address} </span>
+          <span> {adsBoardItem.AdsPoint.address} </span>
         </div>
         <div className="row">
           <span className="d-inline-block col-4 ads-board__content-title">
             Ward - District:
           </span>
           <p className="d-inline-block col-7">
-            {adsBoardItem.AdsPoint.Ward.name} - {adsBoardItem.AdsPoint.District.name}
+            {adsBoardItem.AdsPoint.ward.wardName} - {adsBoardItem.AdsPoint.district.districtName}
           </p>
         </div>
         <div className="row">
@@ -28,7 +27,7 @@ const ModalAdsBoardItemDetail: React.FC = () => {
             LonLat:
           </span>
           <p className="d-inline-block col-7">
-            {adsBoardItem.AdsPoint.Coordinates.Longtitude} - {adsBoardItem.AdsPoint.Coordinates.Latitude}
+            {adsBoardItem.AdsPoint.coordinates.longtitude} - {adsBoardItem.AdsPoint.coordinates.latitude}
           </p>
         </div>
         <div className="row">

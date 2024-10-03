@@ -1,8 +1,7 @@
 import React from 'react';
 import './AdsPoint.css';
 import { IAdsPointItem } from '../../../interfaces';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store/redux/store';
+import { useDispatch } from 'react-redux';
 import { selectAdsPoint } from '../../../store/redux/AdsPoint/actions';
 
 const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
@@ -16,10 +15,10 @@ const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
       <div className="row">
         <div className="d-inline-block col-8 ads-point-title">
 
-          <span>{adsPointItem.Address}</span>
+          <span>{adsPointItem.address}</span>
         </div>
         <div className="d-inline-block col-4">
-          {adsPointItem.NumberOfBoards}/6 Boards
+          {adsPointItem.numberOfBoards}/6 Boards
         </div>
       </div>
       <div className="row">
@@ -28,25 +27,25 @@ const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
             <span className="fw-medium">
               Type of Ads:
             </span>
-            &nbsp;{adsPointItem.AdvertisingForm}
+            &nbsp;{adsPointItem.advertisingForm}
           </div>
           <div className="ads-point-item__summary">
             <span className="fw-medium">
               Location Type:
             </span>
-            &nbsp;{adsPointItem.LocationType}
+            &nbsp;{adsPointItem.locationType}
           </div>
           <div className="align-content-between ads-point-item__summary">
             <span className="fw-medium">
               Area:
             </span>
-            &nbsp;{adsPointItem.Ward.name} - {adsPointItem.District.name}
+            &nbsp;{adsPointItem.ward.wardName} - {adsPointItem.district.districtName}
           </div>
           <div className="ads-point-item__summary">
             <span className="fw-medium">
               Planned Status:
             </span>
-            &nbsp;{adsPointItem.IsPlanned ? "Planned" : "Wait for Approval"}
+            &nbsp;{adsPointItem.isPlanned ? "Planned" : "Wait for Approval"}
           </div>
         </div>
         <div className="col-4 ads-point-item__image">
