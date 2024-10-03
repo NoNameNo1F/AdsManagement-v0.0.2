@@ -44,7 +44,7 @@ AdsManagement is a tools for helping offices of each Disticts, Wards can manage 
     </a>
 </p>
 
-![screenshot](https://github.com/NoNameNo1F/AdsManagement-v0.0.2/images/screenshot1.png)
+![screenshot](https://github.com/NoNameNo1F/AdsManagement-v0.0.2/assets/images/screenshot1.png)
 
 ----
 
