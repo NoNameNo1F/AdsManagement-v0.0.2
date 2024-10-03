@@ -3,6 +3,8 @@ import * as actionTypes from "./actionTypes";
 import { selectAdsPoint } from "./actions";
 interface AdsState {
     adsTitle: string;
+    showAds: boolean;
+    showPopup: boolean;
     adsPointsList: IAdsPointItem[];
     adsBoardsList: IAdsBoardItem[];
     selectedAdsPointItem: IAdsPointItem | null;
@@ -70,6 +72,25 @@ const adsReducer = (state: AdsState = initialState, action: any) => {
                 ...state,
                 adsBoardsList: action.payload,
             };
+        case actionTypes.FETCH_ADS_POINTS_REQUEST:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            };
+        case actionTypes.FETCH_ADS_POINTS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                adsPointsList: action.payload,
+                error: null,
+            }
+        case actionTypes.FETCH_ADS_POINTS_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            }
         default:
             return state;
     }
