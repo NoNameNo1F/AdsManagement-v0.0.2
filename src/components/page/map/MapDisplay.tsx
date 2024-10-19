@@ -1,57 +1,45 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Feature, Tile, Map, View, Collection } from 'ol';
-import { fromLonLat, toLonLat } from 'ol/proj';
-import { Geometry, Point } from 'ol/geom';
-import { GeoJSON } from 'ol/format';
-import { TileJSON, XYZ, Cluster } from 'ol/source';
-import { Style, Icon, Circle as CircleStyle, Fill, Stroke, Text } from 'ol/style';
 import {
     defaults as defaultControls,
     ScaleLine,
     FullScreen,
     MousePosition,
-    Attribution,
-    Rotate,
     OverviewMap,
-    Zoom,
-    ZoomSlider,
-    ZoomToExtent
 } from 'ol/control';
+
 import {
     defaults as defaultInteractions,
-    DragAndDrop,
-    DragBox,
-    DragPan,
     DragRotate,
-    DragRotateAndZoom,
-    DragZoom,
     Draw,
-    Extent,
-    MouseWheelZoom,
-    PinchRotate,
-    Pointer,
     Select,
-    Snap,
-    Translate
 } from 'ol/interaction';
+
+import { 
+    getBaseLayer, 
+    getClusterLayerStyle, 
+    getUpperBaseLayer, 
+    getUpperBaseLayerStyle, 
+    addMapClusterClickInteraction, 
+    addMapDrawPointInteraction, 
+    addMapHoverInteraction, 
+    addMapSelectInteraction 
+} from "../../../utils/map-utils";
+
+import "./MapDisplay.css";
 import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/Tile';
 import VectorSource from 'ol/source/Vector';
-import TileSource from 'ol/source/Tile';
-import { altKeyOnly, click, doubleClick, never, platformModifierKeyOnly, shiftKeyOnly } from 'ol/events/condition';
-import axios from "axios";
-
-import { fetchAdsPoints, saveAdsPoints, loadAdsPoints } from './axios';
-import { v4 as uuid } from 'uuid';
-import { load } from 'ol/Image';
-// import toastNotify from '../../../helpers/toastNotify';
-import { Coordinate } from 'ol/coordinate';
-import "./MapDisplay.css";
-import { clearTimeout } from 'timers';
-import { AdsContainer, AdsPointsList } from '../adspoint';
-import { ISelectedFeatureInfo } from '../../../interfaces';
-import { getAdsPointLayerStyle, getBaseLayer, getClusterLayerStyle, getUpperBaseLayer, getUpperBaseLayerStyle, mapHoverInteraction, mapDrawPointInteraction, mapSelectInteraction } from "../../../utils/map-utils";
 import toastNotify from '../../../utils/toastNotify';
+
+import React, { useEffect, useRef, useState } from 'react';
+import { Map, View } from 'ol';
+import { fromLonLat, toLonLat } from 'ol/proj';
+import { GeoJSON } from 'ol/format';
+import { XYZ, Cluster } from 'ol/source';
+import { altKeyOnly, click, shiftKeyOnly } from 'ol/events/condition';
+import { fetchAdsPoints } from './axios';
+import { Coordinate } from 'ol/coordinate';
+import { AdsContainer } from '../adspoint';
+import { ISelectedFeatureInfo, ISelectedPointInfo } from '../../../interfaces';
 import { ModalAdsBoardItemDetail } from '../adsboard';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
@@ -62,7 +50,6 @@ const formatCoordinate = (coordinate: any) => {
     const lat = lonLat[1].toFixed(6);
     return `Longitude: ${lon}, Latitude: ${lat}`;
 };
-
 
 const overviewMapControl = new OverviewMap({
     collapsed: false,
@@ -88,34 +75,31 @@ const overviewMapControl = new OverviewMap({
 const MapDisplay: React.FC = () => {
     const key = import.meta.env.VITE_MAP_API;
     const distpatch = useDispatch();
-    const adsBoardDisplay = useSelector((state: RootState) => state.adsPoint.selectedAdsBoardItem);
-    const [selectedFeatureInfo, setSelectedFeatureInfo] = useState<ISelectedFeatureInfo | null>(null);
-    const [drawInteraction, setDrawInteraction] = useState(new Draw({ type: 'Point' }));
-
-    const [isDrawEnabled, setIsDrawEnabled] = useState(false);
     const mapRef = useRef<Map | null>(null);
 
-    const [markerSource] = useState(new VectorSource());
-    const [displayAdsPointList, setDisplayAdsPointList] = useState<boolean>(false);
+    const adsBoardDisplay = useSelector((state: RootState) => state.adsPoint.selectedAdsBoardItem);
 
-    //Map Layers
-    //1
+    const [selectedFeatureInfo, setSelectedFeatureInfo] = useState<ISelectedFeatureInfo | null>(null);
+    const [selectedPointInfo, setSelectedPointInfo] = useState<ISelectedPointInfo | null>(null);
+    const [drawInteraction, setDrawInteraction] = useState(new Draw({ type: 'Point' }));
+    const [displayAdsPointList, setDisplayAdsPointList] = useState<boolean>(false);
+    const [isDrawEnabled, setIsDrawEnabled] = useState(false);
+    const [markerSource] = useState(new VectorSource());
+    
+
     const baseLayer = getBaseLayer(key);
-    //2
     const upperBaseLayerStyle = getUpperBaseLayerStyle();
     const upperBaseLayer = getUpperBaseLayer(key);
     upperBaseLayer.setStyle(upperBaseLayerStyle);
-    //3
+
     const adsPointsSource = new VectorSource({
         format: new GeoJSON(),
-        loader: async function (extent, resolution, projection) {
-            // const features: any = await loadAdsPoints();
+        loader: async function () {
             const features: any = await fetchAdsPoints();
             (this as unknown as VectorSource).addFeatures(features);
         }
     });
-    console.log(adsPointsSource);
-    console.log(adsPointsSource.getFeatures());
+
     const clusterSource = new Cluster({
         distance: 50,
         source: adsPointsSource,
@@ -126,12 +110,6 @@ const MapDisplay: React.FC = () => {
     });
 
     useEffect(() => {
-        // 1. Fetching the all features in the mongodb
-        // loadAdsPoints();
-        const adsPointsLayer = new VectorLayer({
-            source: adsPointsSource,
-            style: getAdsPointLayerStyle,
-        });
         const map = new Map({
             target: "map",
             layers: [
@@ -163,22 +141,18 @@ const MapDisplay: React.FC = () => {
         });
 
         mapRef.current = map;
-
-        mapHoverInteraction(map, markerSource, setSelectedFeatureInfo, showPopUp, closePopUp);
-
-        const select = new Select({
-            condition: click,
-        });
-        mapSelectInteraction(select, map, markerSource, setSelectedFeatureInfo, showPopUp, closePopUp, setDisplayAdsPointList);
-
+        const select = new Select({ condition: click });
         const draw = new Draw({
             source: adsPointsSource,
             type: 'Point',
             condition: altKeyOnly || click,
         });
+
         setDrawInteraction(draw);
-        // mapDrawPointInteraction(draw, map, adsPointsSource);
-        // mapDrawPointInteraction(map, adsPointsSource, drawInteraction, setDrawInteraction);
+        addMapClusterClickInteraction(map, clusterLayer);
+        addMapHoverInteraction(map, markerSource, setSelectedPointInfo, showPopUp, closePopUp);
+        addMapSelectInteraction(select, map, markerSource, setSelectedFeatureInfo, showPopUp, closePopUp, setDisplayAdsPointList);
+        
         return () => {
             map.setTarget();
         };
@@ -200,7 +174,7 @@ const MapDisplay: React.FC = () => {
             popUp.style.display = 'none';
         }
     };
-
+    
     const toggleDrawInteraction = () => {
         if (!mapRef.current || !drawInteraction) {
             return;
@@ -210,7 +184,7 @@ const MapDisplay: React.FC = () => {
             mapRef.current.removeInteraction(drawInteraction);
             toastNotify("Drawing disabled", "warning");
         } else {
-            mapDrawPointInteraction(mapRef.current, adsPointsSource, drawInteraction);
+            addMapDrawPointInteraction(mapRef.current, adsPointsSource, drawInteraction);
             toastNotify("Drawing enabled", "success");
         }
         setIsDrawEnabled(!isDrawEnabled);
@@ -222,11 +196,17 @@ const MapDisplay: React.FC = () => {
                 <input className="search-input" placeholder="Tìm kiếm theo địa chỉ" id="search-input" />
             </div>
             <div id="custom-popup">
-                <span className="ads-popup-title">Feature Information</span>
-                <p><strong>Type:</strong> {selectedFeatureInfo?.name || 'N/A'}</p>
-                <p><strong>Coordinates:</strong> {selectedFeatureInfo?.coordinates?.join(', ') || 'N/A'}</p>
-                <button className="ads-popup-button" onClick={closePopUp}>Close</button>
+                <h3 className="ads-popup-title">Feature Information</h3>
+                <p><strong>{selectedPointInfo?.locationType || 'N/A Location'}</strong></p>
+                <p>{selectedPointInfo?.name || 'N/A Address'}</p>
+                <p>{selectedPointInfo?.advertisingForm || 'N/A Advertising Form'}</p>
+                <p>
+                    <strong>
+                        {selectedPointInfo?.isPlanned ? <div className='text-success'>Planned</div> : <div className='text-danger'>Not Planned</div>}
+                    </strong>
+                </p>
             </div>
+
             {adsBoardDisplay && (
                 <ModalAdsBoardItemDetail />
             )}
