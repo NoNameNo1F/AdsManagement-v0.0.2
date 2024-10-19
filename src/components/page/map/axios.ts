@@ -9,8 +9,6 @@ const fetchAdsPoints = async ()=> {
     const response : IApiResponse = await axios.get(ADS_POINT_API);
     const adsPoints = response.data?.result!; 
 
-    console.log(adsPoints);
-
     const featureObj: any = [];
     const features = adsPoints.map((adsPoint: IAdsPointItem) => {
         if (!adsPoint.coordinates.longtitude || !adsPoint.coordinates.latitude) {
@@ -27,7 +25,12 @@ const fetchAdsPoints = async ()=> {
                 ]
             },
             properties: {
-                text: adsPoint.address
+                address: adsPoint.address,
+                isPlanned: adsPoint.isPlanned,
+                locationType: adsPoint.locationType,
+                advertisingForm: adsPoint.advertisingForm,
+                district: adsPoint.district,
+                wardName: adsPoint.ward
             },
             id: adsPoint.pointId
         }
