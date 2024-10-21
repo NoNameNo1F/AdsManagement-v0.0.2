@@ -3,6 +3,7 @@ import { MapRegion, MapScreen, MapDisplay } from '../../components/page/map';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
+import { Header } from '../../components/layout';
 // import './Home.css'
 
 const Home: React.FC = () => {
@@ -15,10 +16,13 @@ const Home: React.FC = () => {
   const [displayReportItem, setDisplayReportItem] = useState<boolean>(false);
 
   return (
-    <div className="main-body d-flex">
-      <ToastContainer />
-      <MapDisplay />
+    <div>
+      <Header />
+      <div className="main-body d-flex">
+        <ToastContainer />
+        <MapDisplay />
 
+      </div>
     </div>
   );
 };

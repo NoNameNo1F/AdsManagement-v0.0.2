@@ -3,7 +3,7 @@ import "./AdsPoint.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
 import { IAdsBoardItem, IAdsPointItem } from '../../../interfaces';
-import { selectAdsPoint } from '../../../store/redux/AdsPoint/actions';
+import { selectAdsPoint } from '../../../store/redux/Advertisement/actions';
 import { AdsBoardItem } from '../adsboard';
 
 const AdsPointItemDetail: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {

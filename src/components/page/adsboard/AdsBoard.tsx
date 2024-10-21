@@ -3,7 +3,7 @@ import './AdsBoard.css';
 import { IAdsBoardItem } from '../../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
-import { selectAdsBoard } from '../../../store/redux/AdsPoint/actions';
+import { selectAdsBoard } from '../../../store/redux/Advertisement/actions';
 
 const AdsBoardItem: React.FC<IAdsBoardItem> = (adsBoardItem: IAdsBoardItem) => {
     const displayAdsBoardModal: IAdsBoardItem = useSelector((state: RootState) => state.adsPoint.selectedAdsBoardItem);

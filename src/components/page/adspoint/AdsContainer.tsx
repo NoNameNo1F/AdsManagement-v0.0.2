@@ -2,7 +2,7 @@ import "./AdsPoint.css";
 import AdsPointContainer from './AdsPointContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
-import { handleAdsContainer, } from '../../../store/redux/AdsPoint/actions';
+import { handleAdsContainer, } from '../../../store/redux/Advertisement/actions';
 
 
 const AdsContainer: React.FC = () => {

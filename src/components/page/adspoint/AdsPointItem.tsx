@@ -2,7 +2,7 @@ import React from 'react';
 import './AdsPoint.css';
 import { IAdsPointItem } from '../../../interfaces';
 import { useDispatch } from 'react-redux';
-import { selectAdsPoint } from '../../../store/redux/AdsPoint/actions';
+import { selectAdsPoint } from '../../../store/redux/Advertisement/actions';
 
 const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
   const dispatch = useDispatch();

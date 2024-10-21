@@ -49,7 +49,7 @@ export const getClusterLayerStyle = (feature: any): Style => {
     
     return new Style({
         image: new CircleStyle({
-            radius: Math.min(size * 10, 20), // Adjust size based on the number of clustered points
+            radius: Math.min(size * 10, 15), // Adjust size based on the number of clustered points
             fill: new Fill({
                 color: fillColor,
             }),

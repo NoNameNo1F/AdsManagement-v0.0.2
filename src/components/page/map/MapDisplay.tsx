@@ -13,15 +13,15 @@ import {
     Select,
 } from 'ol/interaction';
 
-import { 
-    getBaseLayer, 
-    getClusterLayerStyle, 
-    getUpperBaseLayer, 
-    getUpperBaseLayerStyle, 
-    addMapClusterClickInteraction, 
-    addMapDrawPointInteraction, 
-    addMapHoverInteraction, 
-    addMapSelectInteraction 
+import {
+    getBaseLayer,
+    getClusterLayerStyle,
+    getUpperBaseLayer,
+    getUpperBaseLayerStyle,
+    addMapClusterClickInteraction,
+    addMapDrawPointInteraction,
+    addMapHoverInteraction,
+    addMapSelectInteraction
 } from "../../../utils/map-utils";
 
 import "./MapDisplay.css";
@@ -85,7 +85,7 @@ const MapDisplay: React.FC = () => {
     const [displayAdsPointList, setDisplayAdsPointList] = useState<boolean>(false);
     const [isDrawEnabled, setIsDrawEnabled] = useState(false);
     const [markerSource] = useState(new VectorSource());
-    
+
 
     const baseLayer = getBaseLayer(key);
     const upperBaseLayerStyle = getUpperBaseLayerStyle();
@@ -152,7 +152,7 @@ const MapDisplay: React.FC = () => {
         addMapClusterClickInteraction(map, clusterLayer);
         addMapHoverInteraction(map, markerSource, setSelectedPointInfo, showPopUp, closePopUp);
         addMapSelectInteraction(select, map, markerSource, setSelectedFeatureInfo, showPopUp, closePopUp, setDisplayAdsPointList);
-        
+
         return () => {
             map.setTarget();
         };
@@ -163,7 +163,7 @@ const MapDisplay: React.FC = () => {
         if (popUp) {
             const [x, y] = mapRef.current?.getPixelFromCoordinate(coords) || [0, 0];
             popUp.style.display = 'block';
-            popUp.style.left = `${x}px`;
+            popUp.style.left = `${x + 50}px`;
             popUp.style.top = `${y}px`;
         }
     };
@@ -174,7 +174,7 @@ const MapDisplay: React.FC = () => {
             popUp.style.display = 'none';
         }
     };
-    
+
     const toggleDrawInteraction = () => {
         if (!mapRef.current || !drawInteraction) {
             return;

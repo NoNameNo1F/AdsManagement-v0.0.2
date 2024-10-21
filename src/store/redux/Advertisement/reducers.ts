@@ -9,7 +9,6 @@ interface AdsState {
     adsBoardsList: IAdsBoardItem[];
     selectedAdsPointItem: IAdsPointItem | null;
     selectedAdsBoardItem: IAdsBoardItem | null;
-    showAds: boolean;
 }
 
 const initialState: AdsState = {
@@ -38,6 +37,7 @@ const initialState: AdsState = {
     selectedAdsPointItem: null,
     selectedAdsBoardItem: null,
     showAds: false,
+    showPopup: false,
 }
 
 const adsReducer = (state: AdsState = initialState, action: any) => {
