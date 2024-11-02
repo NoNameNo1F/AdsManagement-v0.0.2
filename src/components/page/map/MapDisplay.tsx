@@ -9,40 +9,38 @@ import {
 import {
     defaults as defaultInteractions,
     DragRotate,
-    Draw,
     Select,
 } from 'ol/interaction';
 
-import { 
-    getBaseLayer, 
-    getClusterLayerStyle, 
-    getUpperBaseLayer, 
-    getUpperBaseLayerStyle, 
-    addMapClusterClickInteraction, 
-    addMapDrawPointInteraction, 
-    addMapHoverInteraction, 
-    addMapSelectInteraction 
+import {
+    getBaseLayer,
+    getClusterLayerStyle,
+    getUpperBaseLayer,
+    getUpperBaseLayerStyle,
+    addMapClusterClickInteraction,
+    addMapHoverInteraction
 } from "../../../utils/map-utils";
 
 import "./MapDisplay.css";
 import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/Tile';
 import VectorSource from 'ol/source/Vector';
-import toastNotify from '../../../utils/toastNotify';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Map, View } from 'ol';
 import { fromLonLat, toLonLat } from 'ol/proj';
 import { GeoJSON } from 'ol/format';
 import { XYZ, Cluster } from 'ol/source';
-import { altKeyOnly, click, shiftKeyOnly } from 'ol/events/condition';
-import { fetchAdsPoints } from './axios';
+import { click, shiftKeyOnly } from 'ol/events/condition';
+import { formatAdsPoint } from './axios';
 import { Coordinate } from 'ol/coordinate';
 import { AdsContainer } from '../adspoint';
-import { ISelectedFeatureInfo, ISelectedPointInfo } from '../../../interfaces';
+import { ISelectedPointInfo } from '../../../interfaces';
 import { ModalAdsBoardItemDetail } from '../adsboard';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
+import { useGetAdsPointsQuery } from '../../../apis/advertisementApi';
+import { fetchAdsPoints } from '../../../store/redux/Advertisement/actions';
 
 const formatCoordinate = (coordinate: any) => {
     const lonLat = toLonLat(coordinate);
@@ -74,43 +72,55 @@ const overviewMapControl = new OverviewMap({
 
 const MapDisplay: React.FC = () => {
     const key = import.meta.env.VITE_MAP_API;
-    const distpatch = useDispatch();
+
+    const dispatch = useDispatch();
     const mapRef = useRef<Map | null>(null);
 
-    const adsBoardDisplay = useSelector((state: RootState) => state.adsPoint.selectedAdsBoardItem);
+    const adsBoardDisplay = useSelector((state: RootState) => state.advertisement.selectedAdsBoardItem);
 
-    const [selectedFeatureInfo, setSelectedFeatureInfo] = useState<ISelectedFeatureInfo | null>(null);
     const [selectedPointInfo, setSelectedPointInfo] = useState<ISelectedPointInfo | null>(null);
-    const [drawInteraction, setDrawInteraction] = useState(new Draw({ type: 'Point' }));
-    const [displayAdsPointList, setDisplayAdsPointList] = useState<boolean>(false);
-    const [isDrawEnabled, setIsDrawEnabled] = useState(false);
+
+
+    const baseLayer = useMemo(() =>
+        getBaseLayer(key
+        ), []);
+
+    const upperBaseLayer = useMemo(() => {
+        const layer = getUpperBaseLayer(key);
+        layer.setStyle(getUpperBaseLayerStyle());
+        return layer;
+    }, []);
+
     const [markerSource] = useState(new VectorSource());
-    
 
-    const baseLayer = getBaseLayer(key);
-    const upperBaseLayerStyle = getUpperBaseLayerStyle();
-    const upperBaseLayer = getUpperBaseLayer(key);
-    upperBaseLayer.setStyle(upperBaseLayerStyle);
+    const { data: adsPointsQuery, isSuccess } = useGetAdsPointsQuery({});
 
-    const adsPointsSource = new VectorSource({
-        format: new GeoJSON(),
-        loader: async function () {
-            const features: any = await fetchAdsPoints();
-            (this as unknown as VectorSource).addFeatures(features);
-        }
-    });
+    const adsPointsSource = useMemo(() => new VectorSource({
+        format: new GeoJSON()
+    }), []);
 
-    const clusterSource = new Cluster({
+    const clusterSource = useMemo(() => new Cluster({
         distance: 50,
         source: adsPointsSource,
-    });
-    const clusterLayer = new VectorLayer({
+    }), [adsPointsSource]);
+
+    const clusterLayer = useMemo(() => new VectorLayer({
         source: clusterSource,
         style: (feature) => getClusterLayerStyle(feature),
-    });
+    }), [clusterSource]);
 
     useEffect(() => {
-        const map = new Map({
+        if (isSuccess && adsPointsQuery) {
+            (async () => {
+                const formattedFeatures = await formatAdsPoint(adsPointsQuery);
+                adsPointsSource.addFeatures(formattedFeatures);
+                dispatch(fetchAdsPoints(adsPointsQuery));
+            })();
+        }
+    }, [isSuccess, adsPointsQuery, adsPointsSource, dispatch]);
+
+    useEffect(() => {
+        let map = new Map({
             target: "map",
             layers: [
                 baseLayer,
@@ -142,17 +152,10 @@ const MapDisplay: React.FC = () => {
 
         mapRef.current = map;
         const select = new Select({ condition: click });
-        const draw = new Draw({
-            source: adsPointsSource,
-            type: 'Point',
-            condition: altKeyOnly || click,
-        });
 
-        setDrawInteraction(draw);
         addMapClusterClickInteraction(map, clusterLayer);
         addMapHoverInteraction(map, markerSource, setSelectedPointInfo, showPopUp, closePopUp);
-        addMapSelectInteraction(select, map, markerSource, setSelectedFeatureInfo, showPopUp, closePopUp, setDisplayAdsPointList);
-        
+
         return () => {
             map.setTarget();
         };
@@ -174,21 +177,7 @@ const MapDisplay: React.FC = () => {
             popUp.style.display = 'none';
         }
     };
-    
-    const toggleDrawInteraction = () => {
-        if (!mapRef.current || !drawInteraction) {
-            return;
-        }
 
-        if (isDrawEnabled) {
-            mapRef.current.removeInteraction(drawInteraction);
-            toastNotify("Drawing disabled", "warning");
-        } else {
-            addMapDrawPointInteraction(mapRef.current, adsPointsSource, drawInteraction);
-            toastNotify("Drawing enabled", "success");
-        }
-        setIsDrawEnabled(!isDrawEnabled);
-    };
     return (
         <div className="map-container" id="map">
             <div className="search-container">
@@ -202,7 +191,10 @@ const MapDisplay: React.FC = () => {
                 <p>{selectedPointInfo?.advertisingForm || 'N/A Advertising Form'}</p>
                 <p>
                     <strong>
-                        {selectedPointInfo?.isPlanned ? <div className='text-success'>Planned</div> : <div className='text-danger'>Not Planned</div>}
+                        {selectedPointInfo?.isPlanned ? (
+                            <div className='text-success'>Planned</div>) : (
+                            <div className='text-danger'>Not Planned</div>
+                        )}
                     </strong>
                 </p>
             </div>
@@ -212,9 +204,6 @@ const MapDisplay: React.FC = () => {
             )}
 
             <AdsContainer />
-            <button onClick={toggleDrawInteraction} className="position-absolute bottom-50 z-1">
-                {isDrawEnabled ? 'Disable Drawing' : 'Enable Drawing'}
-            </button>
         </div>
     );
 };

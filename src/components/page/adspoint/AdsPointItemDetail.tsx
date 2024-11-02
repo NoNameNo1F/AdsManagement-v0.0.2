@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "./AdsPoint.css";
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store/redux/store';
+import { useDispatch } from 'react-redux';
 import { IAdsBoardItem, IAdsPointItem } from '../../../interfaces';
-import { selectAdsPoint } from '../../../store/redux/AdsPoint/actions';
-import { AdsBoardItem } from '../adsboard';
+import { fetchAdsBoards, selectAdsPoint } from '../../../store/redux/Advertisement/actions';
+import { useGetAdsBoardsByPointIdQuery } from '../../../apis/advertisementApi';
 
 const AdsPointItemDetail: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
-    const boards: IAdsBoardItem[] = useSelector((state: RootState) => state.adsPoint.adsBoardsList);
     const dispatch = useDispatch();
+    const { data: adsBoardsList } = useGetAdsBoardsByPointIdQuery(adsPointItem.pointId);
+
+    useEffect(() => {
+        dispatch(fetchAdsBoards(adsBoardsList));
+    }, [adsBoardsList, dispatch]);
 
     return (
         <div className="ads-point-item-detail">
@@ -18,7 +21,7 @@ const AdsPointItemDetail: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem
                 </div>
                 <div className="col">
                     <div className="ads-point-item-details__info">
-                        <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.ward.wardname} - {adsPointItem.district.districtName}
+                        <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.ward.wardName} - {adsPointItem.district.districtName}
                     </div>
                     <div className="ads-point-item-details__info">
                         <span className="fw-medium"><i className="bi bi-geo-alt-fill"></i></span> &nbsp;{adsPointItem.advertisingForm}
@@ -45,16 +48,21 @@ const AdsPointItemDetail: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem
                     </div>
                 </div>
             </div>
-            {/* <div className="boards-section">
-                    <h4>Advertisement Boards</h4>
-                    {adsPointItem.adsBoards?.map((board, index) => (
+            <div className="boards-section">
+                <h4>Advertisement Boards</h4>
+                {adsBoardsList && adsBoardsList.length > 0 ? (
+
+                    adsBoardsList.map((board: IAdsBoardItem, index: number) => (
                         <div key={index} className="board-item">
-                            <p>Company Name: {board.companyContacts.companyName}</p>
-                            <p>Board Type: {board.adBoardType}</p>
+                            <p>Company Name: {board.companyContact.name}</p>
+                            <p>Board Type: {board.adsBoardType}</p>
                             <p>Size: {board.size}</p>
                         </div>
-                    ))}
-                </div> */}
+                    ))
+                ) : (
+                    <p className="text-center"> No advertisement boards found.</p>
+                )}
+            </div>
         </div>
     );
 };

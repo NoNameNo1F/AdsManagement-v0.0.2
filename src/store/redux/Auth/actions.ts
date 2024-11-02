@@ -1,14 +1,15 @@
-import { REMOVE_USER_CREDENTIALS, SET_USER_CREDENTIALS } from "./actionTypes";
+import IUserAuth from "../../../interfaces/userAuth";
 
-export const setUserCredentials = (state: any) => {
+import * as actionTypes from "./actionTypes";
+export const setUserCredentials = ( userSession: IUserAuth) => {
     return {
-        type: SET_USER_CREDENTIALS,
-        payload: state
+        type: actionTypes.SET_USER_CREDENTIALS,
+        payload: userSession
     }
 };
 
 export const logout = () => {
     return {
-        type: REMOVE_USER_CREDENTIALS
+        type: actionTypes.REMOVE_USER_CREDENTIALS
     }
 }

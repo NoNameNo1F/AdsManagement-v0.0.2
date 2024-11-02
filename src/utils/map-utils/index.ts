@@ -1,6 +1,6 @@
 import { getBaseLayer, getUpperBaseLayer, setMarkerLayer } from "./map-layers";
 import { getUpperBaseLayerStyle, getClusterLayerStyle, getAdsPointLayerStyle } from "./map-styles";
-import { addMapHoverInteraction, addMapSelectInteraction, addMapDrawPointInteraction, addMapClusterClickInteraction } from "./map-interactions";
+import { addMapHoverInteraction, addMapClusterClickInteraction } from "./map-interactions";
 
 export { 
     getBaseLayer, 
@@ -10,7 +10,5 @@ export {
     getClusterLayerStyle, 
     getAdsPointLayerStyle, 
     addMapHoverInteraction, 
-    addMapSelectInteraction, 
-    addMapDrawPointInteraction,
     addMapClusterClickInteraction 
 };

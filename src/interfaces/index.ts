@@ -5,6 +5,7 @@ import IAdsPointItem from "./adsPointItem";
 import IAdsBoardItem from "./adsBoardItem";
 import IWard from "./types/ward";
 import IDistrict from "./types/district";
+import IUserAuth from "./userAuth";
 
 export type {
     ISelectedFeatureInfo,
@@ -14,4 +15,5 @@ export type {
     IAdsBoardItem,
     IWard,
     IDistrict,
+    IUserAuth,
 };
