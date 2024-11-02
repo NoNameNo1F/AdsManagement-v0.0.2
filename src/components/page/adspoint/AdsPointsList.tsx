@@ -8,7 +8,7 @@ import { RootState } from '../../../store/redux/store';
 const AdsPointsList: React.FC = () => {
     const dispatch = useDispatch();
 
-    const adsPointsList: IAdsPointItem[] = useSelector((state: RootState) => state.adsPoint.adsPointsList);
+    const adsPointsList: IAdsPointItem[] = useSelector((state: RootState) => state.advertisement.adsPointsList);
     const [searchInput, setSearchInput] = useState<string>("");
 
     const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,13 +32,13 @@ const AdsPointsList: React.FC = () => {
                     onChange={(event) => handleSearchChange(event)} />
             </div>
             <div className="ads-points-list">
-                {filteredAdsPoints.map((ads, index) => (
-                    <AdsPointItem
-                        key={index}
-                        {...ads}
-                    />
-                ))}
-
+                {filteredAdsPoints.length ? (
+                    filteredAdsPoints.map((ads, index) => (
+                        <AdsPointItem key={index} {...ads} />
+                    ))
+                ) : (
+                    <p className="text-center"> No ads points found for this search.</p>
+                )}
             </div>
         </div>
     );

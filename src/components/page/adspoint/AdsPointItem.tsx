@@ -2,7 +2,7 @@ import React from 'react';
 import './AdsPoint.css';
 import { IAdsPointItem } from '../../../interfaces';
 import { useDispatch } from 'react-redux';
-import { selectAdsPoint } from '../../../store/redux/AdsPoint/actions';
+import { selectAdsPoint } from '../../../store/redux/Advertisement/actions';
 
 const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
   const dispatch = useDispatch();
@@ -11,14 +11,15 @@ const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
   };
 
   return (
-    <div className="ads-point-item" onClick={handleItemClick}>
+    <div className="ads-point-item"
+      onClick={handleItemClick}>
       <div className="row">
         <div className="d-inline-block col-8 ads-point-title">
 
           <span>{adsPointItem.address}</span>
         </div>
         <div className="d-inline-block col-4">
-          {adsPointItem.numberOfBoards}/6 Boards
+          {/* {adsPointItem.numberOfBoards} */}0 /6 Boards
         </div>
       </div>
       <div className="row">
@@ -33,13 +34,13 @@ const AdsPointItem: React.FC<IAdsPointItem> = (adsPointItem: IAdsPointItem) => {
             <span className="fw-medium">
               Location Type:
             </span>
-            &nbsp;{adsPointItem.locationType}
+            &nbsp; {adsPointItem.locationType}
           </div>
           <div className="align-content-between ads-point-item__summary">
             <span className="fw-medium">
               Area:
             </span>
-            &nbsp;{adsPointItem.ward.wardName} - {adsPointItem.district.districtName}
+            &nbsp; {adsPointItem.ward.wardName} - {adsPointItem.district.districtName}
           </div>
           <div className="ads-point-item__summary">
             <span className="fw-medium">

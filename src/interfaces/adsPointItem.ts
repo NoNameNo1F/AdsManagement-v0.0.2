@@ -1,4 +1,3 @@
-// import { EAdvertisingForm, LocationType } from "../enums";
 import IDistrict from "./types/district";
 import IWard from "./types/ward";
 
@@ -12,9 +11,8 @@ export default interface IAdsPointItem {
     ward: IWard;
     coordinates: {
         longtitude: string,
-        latitude: string
-    }
+        latitude: string;
+    };
     isPlanned: boolean;
-    // adsBoards: AdsBoardItem[] | null;
     numberOfBoards: number;
 };

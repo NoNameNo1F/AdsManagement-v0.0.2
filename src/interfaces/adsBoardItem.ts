@@ -3,12 +3,12 @@ import IAdsPointItem from "./adsPointItem";
 import ICompanyContact from "./companyContact";
 
 export default interface IAdsBoardItem {
-    Id: string;
-    AdsPoint: IAdsPointItem;//IAdsPointItem;
-    AdsBoardType: EAdsBoardType;
-    Size: string;
-    Quantity: number;
-    Image: string;
-    ExpiredDate: string;
-    CompanyContact: ICompanyContact;
+    boardId: string;
+    adsPoint: IAdsPointItem;
+    adsBoardType: EAdsBoardType;
+    size: string;
+    quantity: number;
+    image: string;
+    expiredDate: string;
+    companyContact: ICompanyContact;
 }

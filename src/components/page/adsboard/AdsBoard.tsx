@@ -3,17 +3,17 @@ import './AdsBoard.css';
 import { IAdsBoardItem } from '../../../interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
-import { selectAdsBoard } from '../../../store/redux/AdsPoint/actions';
+import { selectAdsBoard } from '../../../store/redux/Advertisement/actions';
 
 const AdsBoardItem: React.FC<IAdsBoardItem> = (adsBoardItem: IAdsBoardItem) => {
-    const displayAdsBoardModal: IAdsBoardItem = useSelector((state: RootState) => state.adsPoint.selectedAdsBoardItem);
+    const displayAdsBoardModal: IAdsBoardItem = useSelector((state: RootState) => state.advertisement.selectedAdsBoardItem);
     const dispatch = useDispatch();
 
     return (
         <div className="ads-board-item" onClick={() => dispatch(selectAdsBoard(adsBoardItem))}>
             <div className="row">
                 <div className="d-inline-block col-8 ads-board-title">
-                    <span>{adsBoardItem.CompanyContact.Name}</span>
+                    <span>{adsBoardItem.companyContact.name}</span>
                 </div>
             </div>
             <div className="row">
@@ -22,13 +22,13 @@ const AdsBoardItem: React.FC<IAdsBoardItem> = (adsBoardItem: IAdsBoardItem) => {
                         <span className="fw-medium">
                             Type of Board:
                         </span>
-                        &nbsp;{adsBoardItem.AdsBoardType}
+                        &nbsp;{adsBoardItem.adsBoardType}
                     </div>
                     <div className="ads-board-item__summary">
                         <span className="fw-medium">
                             Size:
                         </span>
-                        &nbsp;{adsBoardItem.Size}
+                        &nbsp;{adsBoardItem.size}
                     </div>
                 </div>
             </div>

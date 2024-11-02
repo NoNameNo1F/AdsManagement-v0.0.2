@@ -2,19 +2,19 @@ import axios from "axios";
 import { GeoJSON } from "ol/format";
 import { FeatureObject } from "ol/format/Feature";
 import { IAdsPointItem } from "../../../interfaces";
-import IApiResponse from "../../../interfaces/apiResponse";
-import { ADS_POINT_API } from "../../../constants/baseUrls";
-
-const fetchAdsPoints = async ()=> {
-    const response : IApiResponse = await axios.get(ADS_POINT_API);
-    const adsPoints = response.data?.result!; 
-
+const formatAdsPoint = async (adsPointsList: IAdsPointItem[]) => {
+    if (!adsPointsList || adsPointsList.length === 0) {
+        console.warn("adsPointsQuery is empty or undefined.");
+        return [];
+    }
+    
     const featureObj: any = [];
-    const features = adsPoints.map((adsPoint: IAdsPointItem) => {
+    adsPointsList.forEach((adsPoint: IAdsPointItem) => {
         if (!adsPoint.coordinates.longtitude || !adsPoint.coordinates.latitude) {
             console.warn("Invalid coordinates found for:", adsPoint);
-            return null;  // Skip invalid points
+            return;
         }
+
         const feature = {
             type: "Feature",
             geometry: {
@@ -30,7 +30,7 @@ const fetchAdsPoints = async ()=> {
                 locationType: adsPoint.locationType,
                 advertisingForm: adsPoint.advertisingForm,
                 district: adsPoint.district,
-                wardName: adsPoint.ward
+                ward: adsPoint.ward,
             },
             id: adsPoint.pointId
         }
@@ -38,15 +38,15 @@ const fetchAdsPoints = async ()=> {
     })
 
     const format = new GeoJSON();
-    const ft = format.readFeatures(
-        {
-            type: "FeatureCollection",
-            features: featureObj
-        },
-        {
-            featureProjection: "EPSG:3857"
+    const features = format.readFeatures(
+    {
+        type: "FeatureCollection",
+        features: featureObj
+    },
+    {
+        featureProjection: "EPSG:3857"
         })
-    return ft;
+    return features;
 };
 
 const saveAdsPoints = async (data: FeatureObject) => {
@@ -86,21 +86,4 @@ const fetchFeatures = async (url: string) => {
     }
 };
 
-const loadAdsPoints = async () => {
-    try {
-        const geojsonData = await fetchAdsPoints();
-        if (geojsonData) {
-            const format = new GeoJSON();
-            const features = format.readFeatures(geojsonData, {
-                featureProjection: "EPSG:4326"
-            });
-            return features;
-        } else {
-            throw new Error(`Invalid GeoJSON data format [117_useEffect_LoadAdsPoints]: ${geojsonData}`);
-        }
-    } catch (error) {
-        console.error("[120]Catching Error loading ads points: ", error);
-    }
-};
-
-export { fetchAdsPoints, saveAdsPoints, fetchFeatures, loadAdsPoints };
+export { formatAdsPoint, saveAdsPoints, fetchFeatures };

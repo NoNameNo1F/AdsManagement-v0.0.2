@@ -58,7 +58,7 @@ export const addMapHoverInteraction = (
 };
 
 export const addMapClusterClickInteraction = (map: Map, clusterLayer: VectorLayer<Feature<Geometry>>) => {
-    const zoomInTime = 2000 // 2000ms
+    const zoomInTime = 1000
 
     map.on('click', (e) => {
         clusterLayer.getFeatures(e.pixel).then((clickedFeatures : FeatureLike[]) => {
@@ -76,56 +76,56 @@ export const addMapClusterClickInteraction = (map: Map, clusterLayer: VectorLaye
     });
 };
 
-export const addMapSelectInteraction = (
-    interaction: Select,
-    map: Map,
-    markerSource: VectorSource,
-    setSelectedFeatureInfo: (info: ISelectedFeatureInfo) => void,
-    showPopUp: (coords: [number, number]) => void,
-    closePopUp: () => void,
-    setDisplayAdsPointList: (value: boolean) => void,
-) => {
-    map.addInteraction(interaction);
+// export const addMapSelectInteraction = (
+//     interaction: Select,
+//     map: Map,
+//     markerSource: VectorSource,
+//     setSelectedPointInfo: (info: ISelectedPointInfo) => void,
+//     showPopUp: (coords: [number, number]) => void,
+//     closePopUp: () => void,
+//     setDisplayAdsPointList: (value: boolean) => void,
+// ) => {
+//     map.addInteraction(interaction);
     
-    interaction.on('select', (e) => {
-        if (e.selected.length > 0) {
-            const selectedFeature = e.selected[0];
-            const geometry = selectedFeature.getGeometry();
-            if (geometry) {
-                if (geometry instanceof Point) {
-                    const coords = geometry.getCoordinates();
-                    const lonLat = toLonLat(coords);
-                    markerSource.clear();
-                    markerSource.addFeature(
-                        new Feature(
-                            new Point(coords)
-                        )
-                    );
-                    const markerLayer = setMarkerLayer(markerSource);
-                    map.addLayer(markerLayer);
+//     interaction.on('select', (e) => {
+//         if (e.selected.length > 0) {
+//             const selectedFeature = e.selected[0];
+//             const geometry = selectedFeature.getGeometry();
+//             if (geometry) {
+//                 if (geometry instanceof Point) {
+//                     const coords = geometry.getCoordinates();
+//                     const lonLat = toLonLat(coords);
+//                     markerSource.clear();
+//                     markerSource.addFeature(
+//                         new Feature(
+//                             new Point(coords)
+//                         )
+//                     );
+//                     const markerLayer = setMarkerLayer(markerSource);
+//                     map.addLayer(markerLayer);
 
-                    setSelectedFeatureInfo({
-                        name: selectedFeature.getProperties().text,
-                        coordinates: lonLat
-                    });
+//                     setSelectedPointInfo({
+//                         name: selectedFeature.getProperties().text,
+//                         coordinates: lonLat
+//                     });
 
-                    showPopUp(coords as [number, number]);
-                    setDisplayAdsPointList(true);
-                } else {
-                    setSelectedFeatureInfo({name: null, coordinates: null});
-                    markerSource.clear();
-                    closePopUp();
-                    setDisplayAdsPointList(false);
-                }
-            }
-        } else {
-            setSelectedFeatureInfo({name: null, coordinates: null});
-            markerSource.clear();
-            closePopUp();
-            setDisplayAdsPointList(false);
-        }
-    });
-};
+//                     showPopUp(coords as [number, number]);
+//                     setDisplayAdsPointList(true);
+//                 } else {
+//                     setSelectedPointInfo({name: null, coordinates: null});
+//                     markerSource.clear();
+//                     closePopUp();
+//                     setDisplayAdsPointList(false);
+//                 }
+//             }
+//         } else {
+//             setSelectedPointInfo({name: null, coordinates: null});
+//             markerSource.clear();
+//             closePopUp();
+//             setDisplayAdsPointList(false);
+//         }
+//     });
+// };
 
 export const addMapDrawPointInteraction = (
     map: Map,

@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';
 
 const Dashboard: React.FC = () => {
-    const adsPointsList: IAdsPointItem[] = useSelector((state: RootState) => state.adsPoint.adsPointsList);
+    const adsPointsList: IAdsPointItem[] = useSelector((state: RootState) => state.advertisement.adsPointsList);
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 5;
     const [visibleDropdown, setVisibleDropdown] = useState<string | null>(null);

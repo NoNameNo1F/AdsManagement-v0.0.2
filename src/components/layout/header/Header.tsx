@@ -3,7 +3,7 @@ import "./Header.css";
 import { ListArea } from '../../page/area';
 import { redirect, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { handleAdsContainer } from '../../../store/redux/AdsPoint/actions';
+import { handleAdsContainer } from '../../../store/redux/Advertisement/actions';
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

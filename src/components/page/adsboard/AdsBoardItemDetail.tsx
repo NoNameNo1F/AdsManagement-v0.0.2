@@ -1,25 +1,25 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { IAdsBoardItem } from '../../../interfaces';
 import { RootState } from '../../../store/redux/store';
-import { selectAdsBoard } from '../../../store/redux/AdsPoint/actions';
+import { selectAdsBoard } from '../../../store/redux/Advertisement/actions';
 import "./AdsBoard.css";
 
 const ModalAdsBoardItemDetail: React.FC = () => {
-  const adsBoardItem: IAdsBoardItem = useSelector((state: RootState) => state.adsPoint.selectedAdsBoardItem);
+  const adsBoardItem: IAdsBoardItem = useSelector((state: RootState) => state.advertisement.selectedAdsBoardItem);
   const dispatch = useDispatch();
 
   return (
     <div className="ads-board-container d-flex justify-content-center align-content-between">
       <div className="ads-board__content col-6">
         <div className="ads-board__title d-block pb-3">
-          <span> {adsBoardItem.AdsPoint.address} </span>
+          <span> {adsBoardItem.adsPoint.address} </span>
         </div>
         <div className="row">
           <span className="d-inline-block col-4 ads-board__content-title">
             Ward - District:
           </span>
           <p className="d-inline-block col-7">
-            {adsBoardItem.AdsPoint.ward.wardName} - {adsBoardItem.AdsPoint.district.districtName}
+            {adsBoardItem.adsPoint.ward.wardName} - {adsBoardItem.adsPoint.district.districtName}
           </p>
         </div>
         <div className="row">
@@ -27,7 +27,7 @@ const ModalAdsBoardItemDetail: React.FC = () => {
             LonLat:
           </span>
           <p className="d-inline-block col-7">
-            {adsBoardItem.AdsPoint.coordinates.longtitude} - {adsBoardItem.AdsPoint.coordinates.latitude}
+            {adsBoardItem.adsPoint.coordinates.longtitude} - {adsBoardItem.adsPoint.coordinates.latitude}
           </p>
         </div>
         <div className="row">
@@ -35,7 +35,7 @@ const ModalAdsBoardItemDetail: React.FC = () => {
             Ads Board Type:
           </span>
           <p className="d-inline-block col-7">
-            {adsBoardItem.AdsBoardType}
+            {adsBoardItem.adsBoardType}
           </p>
         </div>
         <div className="row">
@@ -43,7 +43,7 @@ const ModalAdsBoardItemDetail: React.FC = () => {
             Size of Board:
           </span>
           <p className="d-inline-block col-7">
-            {adsBoardItem.Size}
+            {adsBoardItem.size}
           </p>
         </div>
         <div className="row">
@@ -51,7 +51,7 @@ const ModalAdsBoardItemDetail: React.FC = () => {
             Expiration:
           </span>
           <p className="d-inline-block col-7">
-            {adsBoardItem.ExpiredDate}
+            {adsBoardItem.expiredDate}
           </p>
         </div>
         <div className="row">
@@ -59,7 +59,7 @@ const ModalAdsBoardItemDetail: React.FC = () => {
             Company Name:
           </span>
           <p className="d-inline-block col-7">
-            {adsBoardItem.CompanyContact.Name}
+            {adsBoardItem.companyContact.name}
           </p>
         </div>
         <div className="row">
@@ -67,7 +67,7 @@ const ModalAdsBoardItemDetail: React.FC = () => {
             Company Phone:
           </span>
           <p className="d-inline-block col-7">
-            {adsBoardItem.CompanyContact.Phone}
+            {adsBoardItem.companyContact.phone}
           </p>
         </div>
       </div>
@@ -75,7 +75,7 @@ const ModalAdsBoardItemDetail: React.FC = () => {
       <div className="col-5 col-md-5">
         <div className="row">
           <div className="ads-board-image mb-3">
-            {adsBoardItem.Image && (
+            {adsBoardItem.image && (
               <img
                 src={"https://th.bing.com/th/id/OIP.SMIO75YWFqQnk5sWCutx4wHaEK?rs=1&pid=ImgDetMain"}//selectedAdsBoardItem.image
                 alt="Board Image"
