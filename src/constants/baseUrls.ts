@@ -1,5 +1,5 @@
-const HTTP_URL = "http://localhost:5245/";
-const HTTPS_URL = "https://localhost:7071/";
+const HTTP_URL = import.meta.env.VITE_HTTP_URL;
+const HTTPS_URL = import.meta.env.VITE_HTTPS_URL;
 
 const API = HTTPS_URL + "api/";
 export const API_V1 = API + "v1/";

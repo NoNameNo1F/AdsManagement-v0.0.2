@@ -24,7 +24,7 @@ const advertisementApi = createApi({
                 url: `${ADS_POINT_API}/${pointId}`,
                 method: "GET",
             }),
-            transformResponse: (response: IApiResponse) => response.data?.result,
+            transformResponse: (response: IApiResponse["data"]) => response?.result,
             providesTags: ["adsPoints"],
         }),
         getAdsBoardsByPointId: builder.query({
@@ -32,7 +32,7 @@ const advertisementApi = createApi({
                 url: `${ADS_BOARD_API}/${adsPointId}`,
                 method: "GET",
             }),
-            transformResponse: (response: IApiResponse) => response.data?.result,
+            transformResponse: (response: IApiResponse["data"]) => response?.result,
         })
     }),
 });

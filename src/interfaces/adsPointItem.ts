@@ -11,7 +11,7 @@ export default interface IAdsPointItem {
     ward: IWard;
     coordinates: {
         longtitude: string,
-        latitude: string;
+        latitude: string
     };
     isPlanned: boolean;
     numberOfBoards: number;

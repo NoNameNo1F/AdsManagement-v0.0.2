@@ -1,5 +1,4 @@
 import "./AdsPoint.css";
-// import AdsPointsList from './AdsPointsList';
 import AdsPointItemDetail from './AdsPointItemDetail';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/redux/store';

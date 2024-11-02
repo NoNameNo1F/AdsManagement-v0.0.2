@@ -7,7 +7,6 @@ import { setMarkerLayer } from "./map-layers";
 import { Draw, Select } from "ol/interaction";
 import { GeoJSON } from "ol/format";
 import { v4 as uuid } from 'uuid';
-import { saveAdsPoints } from "../../components/page/map/axios";
 import ISelectedPointInfo from "../../interfaces/selectedPointInfo";
 import VectorLayer from "ol/layer/Vector";
 import { FeatureLike } from "ol/Feature";
@@ -73,84 +72,5 @@ export const addMapClusterClickInteraction = (map: Map, clusterLayer: VectorLaye
             }
           }
         });
-    });
-};
-
-// export const addMapSelectInteraction = (
-//     interaction: Select,
-//     map: Map,
-//     markerSource: VectorSource,
-//     setSelectedPointInfo: (info: ISelectedPointInfo) => void,
-//     showPopUp: (coords: [number, number]) => void,
-//     closePopUp: () => void,
-//     setDisplayAdsPointList: (value: boolean) => void,
-// ) => {
-//     map.addInteraction(interaction);
-    
-//     interaction.on('select', (e) => {
-//         if (e.selected.length > 0) {
-//             const selectedFeature = e.selected[0];
-//             const geometry = selectedFeature.getGeometry();
-//             if (geometry) {
-//                 if (geometry instanceof Point) {
-//                     const coords = geometry.getCoordinates();
-//                     const lonLat = toLonLat(coords);
-//                     markerSource.clear();
-//                     markerSource.addFeature(
-//                         new Feature(
-//                             new Point(coords)
-//                         )
-//                     );
-//                     const markerLayer = setMarkerLayer(markerSource);
-//                     map.addLayer(markerLayer);
-
-//                     setSelectedPointInfo({
-//                         name: selectedFeature.getProperties().text,
-//                         coordinates: lonLat
-//                     });
-
-//                     showPopUp(coords as [number, number]);
-//                     setDisplayAdsPointList(true);
-//                 } else {
-//                     setSelectedPointInfo({name: null, coordinates: null});
-//                     markerSource.clear();
-//                     closePopUp();
-//                     setDisplayAdsPointList(false);
-//                 }
-//             }
-//         } else {
-//             setSelectedPointInfo({name: null, coordinates: null});
-//             markerSource.clear();
-//             closePopUp();
-//             setDisplayAdsPointList(false);
-//         }
-//     });
-// };
-
-export const addMapDrawPointInteraction = (
-    map: Map,
-    adsPointsSource: VectorSource,
-    drawInteraction: Draw
-) => {
-    map.addInteraction(drawInteraction);
-    drawInteraction.on('drawend', async (event) => {
-        let feature = event.feature;
-        const format = new GeoJSON();
-        feature.setProperties({
-            text: "Ads point",
-        });
-        feature.setId(uuid());
-        const newFeature = format.writeFeatureObject(feature);
-
-        console.log("3. New feature created: ", newFeature);
-
-
-        try {
-            await saveAdsPoints(newFeature);
-            adsPointsSource.addFeature(feature);
-            console.log("4a. Features: ", adsPointsSource.getFeatures());
-        } catch (error) {
-            console.error("4b. Error saving ads points: ", error);
-        }
     });
 };

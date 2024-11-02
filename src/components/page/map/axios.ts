@@ -1,6 +1,5 @@
 import axios from "axios";
 import { GeoJSON } from "ol/format";
-import { FeatureObject } from "ol/format/Feature";
 import { IAdsPointItem } from "../../../interfaces";
 const formatAdsPoint = async (adsPointsList: IAdsPointItem[]) => {
     if (!adsPointsList || adsPointsList.length === 0) {
@@ -49,17 +48,6 @@ const formatAdsPoint = async (adsPointsList: IAdsPointItem[]) => {
     return features;
 };
 
-const saveAdsPoints = async (data: FeatureObject) => {
-    try {
-        const response = await axios.post('http://localhost:5000/api/geojson', data);
-        console.log('Data successfully saved:', data);
-        return response.data
-    } catch (error) {
-        console.error('Error saving data:', error);
-        throw error;
-    }
-};
-
 const fetchFeatures = async (url: string) => {
     try {
         const response = await axios.get(url);
@@ -86,4 +74,4 @@ const fetchFeatures = async (url: string) => {
     }
 };
 
-export { formatAdsPoint, saveAdsPoints, fetchFeatures };
+export { formatAdsPoint, fetchFeatures };
